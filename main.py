@@ -18,6 +18,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from src.data.dados_exemplo import carregar_dados_exemplo
+from src.data.dados_reais import carregar_dados_reais, get_ratings_info, get_financial_highlights
 from src.analysis.indicadores import AnalisadorIndicadores
 from src.analysis.comparador import ComparadorSeguradora
 from src.reports.gerador_relatorios import GeradorRelatorios
@@ -49,6 +50,11 @@ def main():
         action="store_true",
         help="Gera relatórios individuais para cada seguradora"
     )
+    parser.add_argument(
+        "--dados-reais", "-d",
+        action="store_true",
+        help="Usa dados reais de seguradoras (Junto Seguros, Zurich, etc.)"
+    )
 
     args = parser.parse_args()
 
@@ -58,10 +64,21 @@ def main():
     print("=" * 80)
     print()
 
-    # Carrega dados de exemplo
+    # Carrega dados
     print("📊 Carregando dados de seguradoras...")
-    seguradoras = carregar_dados_exemplo()
-    print(f"   ✓ {len(seguradoras)} seguradoras carregadas")
+    if args.dados_reais:
+        seguradoras = carregar_dados_reais()
+        print(f"   ✓ {len(seguradoras)} seguradoras com dados REAIS carregadas")
+        # Exibe informações de ratings
+        ratings = get_ratings_info()
+        for nome, info in ratings.items():
+            print(f"   📋 {nome}:")
+            for key, value in info.items():
+                if key != "awards":
+                    print(f"      • {key}: {value}")
+    else:
+        seguradoras = carregar_dados_exemplo()
+        print(f"   ✓ {len(seguradoras)} seguradoras (dados de exemplo) carregadas")
     print()
 
     # Inicializa analisador e calcula indicadores
@@ -102,8 +119,9 @@ def main():
         formatos = [args.formato]
 
     # Gera relatório comparativo
+    nome_base = "relatorio_comparativo_dados_reais" if args.dados_reais else "relatorio_comparativo_seguradoras"
     arquivos = gerador.gerar_relatorio_completo(
-        nome_arquivo="relatorio_comparativo_seguradoras",
+        nome_arquivo=nome_base,
         formatos=formatos
     )
 

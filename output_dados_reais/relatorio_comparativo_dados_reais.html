@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Comparativo - Força Financeira de Seguradoras</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2b6cb0;
+            --success-color: #38a169;
+            --warning-color: #d69e2e;
+            --danger-color: #e53e3e;
+            --light-bg: #f7fafc;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .metric-card h3 {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .metric-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .metric-card .unit {
+            font-size: 0.9rem;
+            color: #a0aec0;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .table th {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table-striped tbody tr:nth-child(odd) {
+            background-color: #f8fafc;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #edf2f7;
+        }
+
+        .rating-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .rating-aaa, .rating-aa { background: #c6f6d5; color: #22543d; }
+        .rating-a { background: #bee3f8; color: #2a4365; }
+        .rating-bbb, .rating-bb { background: #fefcbf; color: #744210; }
+        .rating-b, .rating-ccc { background: #fed7d7; color: #742a2a; }
+        .rating-cc, .rating-c, .rating-d { background: #feb2b2; color: #742a2a; }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 20px 0;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            color: #718096;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            color: var(--primary-color);
+        }
+
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            margin-bottom: -2px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #ebf8ff, #bee3f8);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .highlight-box.success {
+            background: linear-gradient(135deg, #f0fff4, #c6f6d5);
+        }
+
+        .highlight-box.warning {
+            background: linear-gradient(135deg, #fffff0, #fefcbf);
+        }
+
+        .highlight-box h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .pontos-lista {
+            list-style: none;
+            padding: 0;
+        }
+
+        .pontos-lista li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .pontos-lista li:last-child {
+            border-bottom: none;
+        }
+
+        .ponto-forte::before {
+            content: "✓ ";
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        .ponto-fraco::before {
+            content: "✗ ";
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab {
+                padding: 10px 15px;
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .print-only {
+            display: none;
+        }
+
+        @media print {
+            .no-print {
+                display: none;
+            }
+
+            .print-only {
+                display: block;
+            }
+
+            .card {
+                break-inside: avoid;
+            }
+
+            body {
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Relatório Comparativo de Força Financeira</h1>
+            <p>Análise Comparativa de Seguradoras | Gerado em 03/01/2026 às 17:28</p>
+        </header>
+
+        <!-- Métricas Resumo -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3>Seguradoras Analisadas</h3>
+                <div class="value">3</div>
+            </div>
+            <div class="metric-card">
+                <h3>Ativo Total do Setor</h3>
+                <div class="value">R$ 1864564.40</div>
+                <div class="unit">milhões</div>
+            </div>
+            <div class="metric-card">
+                <h3>Patrimônio Líquido Total</h3>
+                <div class="value">R$ 128031.67</div>
+                <div class="unit">milhões</div>
+            </div>
+            <div class="metric-card">
+                <h3>Prêmios Emitidos Total</h3>
+                <div class="value">R$ 224910.68</div>
+                <div class="unit">milhões</div>
+            </div>
+        </div>
+
+        <!-- Destaques -->
+        <div class="two-column">
+            <div class="highlight-box success">
+                <h4>🏆 Melhor Seguradora</h4>
+                <p><strong>Zurich Insurance Company Ltd</strong></p>
+                <p>Score: 62.5 | Rating: BBB</p>
+            </div>
+            <div class="highlight-box warning">
+                <h4>⚠️ Requer Atenção</h4>
+                <p><strong>Junto Seguros S.A.</strong></p>
+                <p>Score: 47.5 | Rating: B</p>
+            </div>
+        </div>
+
+        <!-- Gráfico de Scores -->
+        <div class="card">
+            <div class="card-header">📊 Comparativo de Força Financeira</div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="scoreChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rankings por Categoria -->
+        <div class="card">
+            <div class="card-header">📈 Rankings por Categoria</div>
+            <div class="card-body">
+                <div class="tabs no-print">
+                    <button class="tab active" onclick="showTab('geral')">Geral</button>
+                    <button class="tab" onclick="showTab('solvencia')">Solvência</button>
+                    <button class="tab" onclick="showTab('liquidez')">Liquidez</button>
+                    <button class="tab" onclick="showTab('rentabilidade')">Rentabilidade</button>
+                    <button class="tab" onclick="showTab('sinistralidade')">Sinistralidade</button>
+                </div>
+
+                <div id="tab-geral" class="tab-content active">
+                    <h4>Ranking Geral de Força Financeira</h4>
+                    <table border="1" class="dataframe table table-striped table-hover">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Posição</th>
+      <th>Seguradora</th>
+      <th>Score Força Financeira</th>
+      <th>Rating</th>
+      <th>Ativo Total (R$ MM)</th>
+      <th>PL (R$ MM)</th>
+      <th>Prêmios (R$ MM)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Zurich Insurance Company Ltd</td>
+      <td>62.50</td>
+      <td>BBB</td>
+      <td>1,862,580.00</td>
+      <td>127,360.00</td>
+      <td>223,960.00</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Junto Resseguros S.A.</td>
+      <td>58.75</td>
+      <td>BB</td>
+      <td>880.00</td>
+      <td>400.00</td>
+      <td>300.00</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Junto Seguros S.A.</td>
+      <td>47.50</td>
+      <td>B</td>
+      <td>1,104.40</td>
+      <td>271.67</td>
+      <td>650.68</td>
+    </tr>
+  </tbody>
+</table>
+                </div>
+
+                <div id="tab-solvencia" class="tab-content">
+                    <h4>Ranking de Solvência</h4>
+                    <table border="1" class="dataframe table table-striped">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Posição</th>
+      <th>Seguradora</th>
+      <th>Índice Solvência</th>
+      <th>Cobertura Provisões</th>
+      <th>Margem Solvência (R$ MM)</th>
+      <th>Score Solvência</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Junto Resseguros S.A.</td>
+      <td>0.51</td>
+      <td>0.86</td>
+      <td>350.00</td>
+      <td>82.19</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Zurich Insurance Company Ltd</td>
+      <td>0.07</td>
+      <td>1.33</td>
+      <td>77,360.00</td>
+      <td>57.30</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Junto Seguros S.A.</td>
+      <td>0.11</td>
+      <td>0.33</td>
+      <td>218.56</td>
+      <td>22.98</td>
+    </tr>
+  </tbody>
+</table>
+                </div>
+
+                <div id="tab-liquidez" class="tab-content">
+                    <h4>Ranking de Liquidez</h4>
+                    <table border="1" class="dataframe table table-striped">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Posição</th>
+      <th>Seguradora</th>
+      <th>Liquidez Corrente</th>
+      <th>Liquidez Seca</th>
+      <th>Liquidez Imediata</th>
+      <th>Score Liquidez</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Zurich Insurance Company Ltd</td>
+      <td>1.50</td>
+      <td>1.35</td>
+      <td>1.27</td>
+      <td>100.00</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Junto Resseguros S.A.</td>
+      <td>0.95</td>
+      <td>0.64</td>
+      <td>0.44</td>
+      <td>48.56</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Junto Seguros S.A.</td>
+      <td>0.56</td>
+      <td>0.18</td>
+      <td>0.14</td>
+      <td>20.60</td>
+    </tr>
+  </tbody>
+</table>
+                </div>
+
+                <div id="tab-rentabilidade" class="tab-content">
+                    <h4>Ranking de Rentabilidade</h4>
+                    <table border="1" class="dataframe table table-striped">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Posição</th>
+      <th>Seguradora</th>
+      <th>ROE (%)</th>
+      <th>ROA (%)</th>
+      <th>Margem Líquida (%)</th>
+      <th>Lucro (R$ MM)</th>
+      <th>Score Rentabilidade</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Zurich Insurance Company Ltd</td>
+      <td>378.53</td>
+      <td>25.88</td>
+      <td>267.29</td>
+      <td>482,095.00</td>
+      <td>9,999.99</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Junto Seguros S.A.</td>
+      <td>339.38</td>
+      <td>83.49</td>
+      <td>176.84</td>
+      <td>922.01</td>
+      <td>4,229.42</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Junto Resseguros S.A.</td>
+      <td>124.50</td>
+      <td>56.59</td>
+      <td>221.33</td>
+      <td>498.00</td>
+      <td>2,459.53</td>
+    </tr>
+  </tbody>
+</table>
+                </div>
+
+                <div id="tab-sinistralidade" class="tab-content">
+                    <h4>Ranking de Sinistralidade</h4>
+                    <table border="1" class="dataframe table table-striped">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Posição</th>
+      <th>Seguradora</th>
+      <th>Sinistralidade (%)</th>
+      <th>Índice Despesas (%)</th>
+      <th>Índice Combinado (%)</th>
+      <th>Score Sinistralidade</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Junto Seguros S.A.</td>
+      <td>11.75</td>
+      <td>43.22</td>
+      <td>54.97</td>
+      <td>7,177.74</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Junto Resseguros S.A.</td>
+      <td>40.00</td>
+      <td>35.56</td>
+      <td>75.56</td>
+      <td>4,657.21</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Zurich Insurance Company Ltd</td>
+      <td>81.46</td>
+      <td>49.37</td>
+      <td>130.83</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Matriz Comparativa -->
+        <div class="card">
+            <div class="card-header">📋 Matriz Comparativa Completa</div>
+            <div class="card-body" style="overflow-x: auto;">
+                <table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Seguradora</th>
+      <th>Rating</th>
+      <th>Score Força Financeira</th>
+      <th>Índice Solvência</th>
+      <th>Liquidez Corrente</th>
+      <th>ROE (%)</th>
+      <th>Sinistralidade (%)</th>
+      <th>Índice Combinado (%)</th>
+      <th>Endividamento (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Zurich Insurance Company Ltd</td>
+      <td>BBB</td>
+      <td>62.50</td>
+      <td>0.07</td>
+      <td>1.50</td>
+      <td>378.53</td>
+      <td>81.46</td>
+      <td>130.83</td>
+      <td>91.36</td>
+    </tr>
+    <tr>
+      <td>Junto Resseguros S.A.</td>
+      <td>BB</td>
+      <td>58.75</td>
+      <td>0.51</td>
+      <td>0.95</td>
+      <td>124.50</td>
+      <td>40.00</td>
+      <td>75.56</td>
+      <td>88.64</td>
+    </tr>
+    <tr>
+      <td>Junto Seguros S.A.</td>
+      <td>B</td>
+      <td>47.50</td>
+      <td>0.11</td>
+      <td>0.56</td>
+      <td>339.38</td>
+      <td>11.75</td>
+      <td>54.97</td>
+      <td>225.16</td>
+    </tr>
+  </tbody>
+</table>
+            </div>
+        </div>
+
+        <!-- Estatísticas do Setor -->
+        <div class="card">
+            <div class="card-header">📉 Estatísticas do Setor</div>
+            <div class="card-body">
+                <div class="two-column">
+                    <div>
+                        <h4 style="margin-bottom: 15px;">Médias do Setor</h4>
+                        <table class="table">
+                            <tr><td>Score de Força Financeira</td><td><strong>56.25</strong></td></tr>
+                            <tr><td>Índice de Solvência</td><td><strong>0.23</strong></td></tr>
+                            <tr><td>Liquidez Corrente</td><td><strong>1.00</strong></td></tr>
+                            <tr><td>ROE</td><td><strong>280.80%</strong></td></tr>
+                            <tr><td>Sinistralidade</td><td><strong>44.40%</strong></td></tr>
+                            <tr><td>Índice Combinado</td><td><strong>87.12%</strong></td></tr>
+                        </table>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 15px;">Distribuição de Ratings</h4>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="ratingChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Análise Individual -->
+        <div class="card">
+            <div class="card-header">🔍 Análise Individual das Seguradoras</div>
+            <div class="card-body">
+                
+                <div class="highlight-box" style="margin-bottom: 20px;">
+                    <h4>Junto Seguros S.A. - Rating B (Score: 47.5)</h4>
+                    <div class="two-column" style="margin-top: 15px;">
+                        <div>
+                            <h5 style="color: var(--success-color);">Pontos Fortes</h5>
+                            <ul class="pontos-lista">
+                                
+                                <li class="ponto-forte">Rentabilidade atrativa: ROE de 339.4%</li>
+                                
+                                <li class="ponto-forte">Baixa sinistralidade: 11.8%</li>
+                                
+                                <li class="ponto-forte">Operação eficiente: índice combinado de 55.0%</li>
+                                
+                                
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 style="color: var(--danger-color);">Pontos de Atenção</h5>
+                            <ul class="pontos-lista">
+                                
+                                <li class="ponto-fraco">Solvência baixa: índice de 0.11</li>
+                                
+                                <li class="ponto-fraco">Cobertura insuficiente de provisões: 0.33x</li>
+                                
+                                <li class="ponto-fraco">Liquidez corrente preocupante: 0.56</li>
+                                
+                                <li class="ponto-fraco">Alto endividamento: 225.2%</li>
+                                
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="highlight-box" style="margin-bottom: 20px;">
+                    <h4>Zurich Insurance Company Ltd - Rating BBB (Score: 62.5)</h4>
+                    <div class="two-column" style="margin-top: 15px;">
+                        <div>
+                            <h5 style="color: var(--success-color);">Pontos Fortes</h5>
+                            <ul class="pontos-lista">
+                                
+                                <li class="ponto-forte">Provisões bem cobertas: 1.33x</li>
+                                
+                                <li class="ponto-forte">Boa liquidez corrente: 1.50</li>
+                                
+                                <li class="ponto-forte">Rentabilidade atrativa: ROE de 378.5%</li>
+                                
+                                
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 style="color: var(--danger-color);">Pontos de Atenção</h5>
+                            <ul class="pontos-lista">
+                                
+                                <li class="ponto-fraco">Solvência baixa: índice de 0.07</li>
+                                
+                                <li class="ponto-fraco">Alta sinistralidade: 81.5%</li>
+                                
+                                <li class="ponto-fraco">Operação deficitária: índice combinado de 130.8%</li>
+                                
+                                <li class="ponto-fraco">Alto endividamento: 91.4%</li>
+                                
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="highlight-box" style="margin-bottom: 20px;">
+                    <h4>Junto Resseguros S.A. - Rating BB (Score: 58.8)</h4>
+                    <div class="two-column" style="margin-top: 15px;">
+                        <div>
+                            <h5 style="color: var(--success-color);">Pontos Fortes</h5>
+                            <ul class="pontos-lista">
+                                
+                                <li class="ponto-forte">Rentabilidade atrativa: ROE de 124.5%</li>
+                                
+                                <li class="ponto-forte">Baixa sinistralidade: 40.0%</li>
+                                
+                                <li class="ponto-forte">Operação eficiente: índice combinado de 75.6%</li>
+                                
+                                
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 style="color: var(--danger-color);">Pontos de Atenção</h5>
+                            <ul class="pontos-lista">
+                                
+                                <li class="ponto-fraco">Solvência baixa: índice de 0.51</li>
+                                
+                                <li class="ponto-fraco">Cobertura insuficiente de provisões: 0.86x</li>
+                                
+                                <li class="ponto-fraco">Liquidez corrente preocupante: 0.95</li>
+                                
+                                <li class="ponto-fraco">Alto endividamento: 88.6%</li>
+                                
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <footer>
+            <p>Relatório gerado automaticamente pelo Sistema de Análise Financeira de Seguradoras</p>
+            <p>© 03/0 - Todos os direitos reservados</p>
+        </footer>
+    </div>
+
+    <script>
+        // Gráfico de Scores
+        const ctx = document.getElementById('scoreChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["Zurich Insurance Company Ltd", "Junto Resseguros S.A.", "Junto Seguros S.A."],
+                datasets: [{
+                    label: 'Score de Força Financeira',
+                    data: [62.5, 58.75, 47.5],
+                    backgroundColor: [62.5, 58.75, 47.5].map(score => {
+                        if (score >= 80) return 'rgba(56, 161, 105, 0.8)';
+                        if (score >= 60) return 'rgba(66, 153, 225, 0.8)';
+                        if (score >= 40) return 'rgba(214, 158, 46, 0.8)';
+                        return 'rgba(229, 62, 62, 0.8)';
+                    }),
+                    borderColor: [62.5, 58.75, 47.5].map(score => {
+                        if (score >= 80) return 'rgba(56, 161, 105, 1)';
+                        if (score >= 60) return 'rgba(66, 153, 225, 1)';
+                        if (score >= 40) return 'rgba(214, 158, 46, 1)';
+                        return 'rgba(229, 62, 62, 1)';
+                    }),
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            afterLabel: function(context) {
+                                return 'Rating: ' + ["BBB", "BB", "B"][context.dataIndex];
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Score de Força Financeira'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Ratings
+        const ratingData = {"B": 1, "BB": 1, "BBB": 1};
+        const ratingLabels = Object.keys(ratingData);
+        const ratingValues = Object.values(ratingData);
+
+        new Chart(document.getElementById('ratingChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ratingLabels,
+                datasets: [{
+                    data: ratingValues,
+                    backgroundColor: [
+                        '#38a169', '#48bb78', '#4299e1', '#ecc94b',
+                        '#ed8936', '#e53e3e', '#c53030', '#9b2c2c', '#742a2a'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right'
+                    }
+                }
+            }
+        });
+
+        // Tabs
+        function showTab(tabId) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+        }
+    </script>
+</body>
+</html>
