@@ -13,8 +13,10 @@ from typing import List, Optional
 sys.path.insert(0, str(Path(__file__).parent))
 
 from src.data.dados_exemplo import carregar_dados_exemplo
+from src.data.dados_resseguro_grupo import carregar_dados_resseguro_grupo, carregar_seguradoras_fronting
 from src.analysis.indicadores import AnalisadorIndicadores
 from src.analysis.comparador import ComparadorSeguradora
+from src.analysis.terminal_forca_isolada import TerminalForcaIsolada
 from src.models.seguradora import Seguradora
 
 
@@ -120,7 +122,10 @@ class TerminalApp:
         self.seguradoras: List[Seguradora] = []
         self.analisador = AnalisadorIndicadores()
         self.comparador = ComparadorSeguradora()
+        self.terminal_forca_isolada = TerminalForcaIsolada()
         self.dados_carregados = False
+        self.infos_grupo = []
+        self.infos_resseguro = []
 
     def exibir_cabecalho(self, titulo: str = None):
         """Exibe o cabeçalho da aplicação"""
@@ -158,6 +163,9 @@ class TerminalApp:
         print(f"  {Cores.BOLD}{Cores.CIANO}║{Cores.RESET}   {Cores.AMARELO}[7]{Cores.RESET} Análise de Indicadores por Categoria                 {Cores.BOLD}{Cores.CIANO}║{Cores.RESET}")
         print(f"  {Cores.BOLD}{Cores.CIANO}║{Cores.RESET}   {Cores.AMARELO}[8]{Cores.RESET} Gerar Relatórios (HTML/Excel)                        {Cores.BOLD}{Cores.CIANO}║{Cores.RESET}")
         print(f"  {Cores.BOLD}{Cores.CIANO}║{Cores.RESET}                                                              {Cores.BOLD}{Cores.CIANO}║{Cores.RESET}")
+        print(f"  {Cores.BOLD}{Cores.CIANO}║{Cores.RESET}   {Cores.MAGENTA_CLARO}[9]{Cores.RESET} {Cores.BOLD}ANÁLISE DE FORÇA FINANCEIRA ISOLADA{Cores.RESET}              {Cores.BOLD}{Cores.CIANO}║{Cores.RESET}")
+        print(f"  {Cores.BOLD}{Cores.CIANO}║{Cores.RESET}       {Cores.CINZA}(Fissuras, Rating Grupo vs Isolado, 50MM){Cores.RESET}          {Cores.BOLD}{Cores.CIANO}║{Cores.RESET}")
+        print(f"  {Cores.BOLD}{Cores.CIANO}║{Cores.RESET}                                                              {Cores.BOLD}{Cores.CIANO}║{Cores.RESET}")
         print(f"  {Cores.BOLD}{Cores.CIANO}║{Cores.RESET}   {Cores.VERMELHO}[0]{Cores.RESET} Sair                                                 {Cores.BOLD}{Cores.CIANO}║{Cores.RESET}")
         print(f"  {Cores.BOLD}{Cores.CIANO}║{Cores.RESET}                                                              {Cores.BOLD}{Cores.CIANO}║{Cores.RESET}")
         print(f"  {Cores.BOLD}{Cores.CIANO}╚══════════════════════════════════════════════════════════════╝{Cores.RESET}")
@@ -171,6 +179,11 @@ class TerminalApp:
         print(f"\n{Cores.AMARELO}⏳ Carregando dados de seguradoras...{Cores.RESET}")
         self.seguradoras = carregar_dados_exemplo()
 
+        print(f"{Cores.AMARELO}⏳ Carregando dados de resseguro e grupo...{Cores.RESET}")
+        dados_resseguro = carregar_dados_resseguro_grupo()
+        self.infos_grupo = [d[0] for d in dados_resseguro]
+        self.infos_resseguro = [d[1] for d in dados_resseguro]
+
         print(f"{Cores.AMARELO}⏳ Calculando indicadores financeiros...{Cores.RESET}")
         for seg in self.seguradoras:
             seg.indicadores = self.analisador.calcular_indicadores(seg)
@@ -182,11 +195,14 @@ class TerminalApp:
         self.dados_carregados = True
 
         print(f"\n{Cores.VERDE}✓ {len(self.seguradoras)} seguradoras carregadas com sucesso!{Cores.RESET}")
+        print(f"{Cores.VERDE}✓ Dados de resseguro e grupo econômico carregados!{Cores.RESET}")
         print(f"\n{Cores.BOLD}Seguradoras disponíveis:{Cores.RESET}")
 
         for i, seg in enumerate(self.seguradoras, 1):
             cor = cor_rating(seg.indicadores.classificacao_risco)
+            grupo = self.infos_grupo[i-1].nome_grupo if i-1 < len(self.infos_grupo) else "N/D"
             print(f"  {i}. {seg.nome}")
+            print(f"     Grupo: {Cores.CINZA}{grupo}{Cores.RESET}")
             print(f"     Score: {cor_score(seg.indicadores.score_forca_financeira)}{seg.indicadores.score_forca_financeira:.1f}{Cores.RESET} | "
                   f"Rating: {cor}{seg.indicadores.classificacao_risco}{Cores.RESET} | "
                   f"Ativo Total: {formatar_moeda(seg.balanco.ativo_total)}")
@@ -742,6 +758,21 @@ class TerminalApp:
 
         pausar()
 
+    def analise_forca_isolada(self):
+        """Executa o módulo de análise de força financeira isolada"""
+        if not self.dados_carregados:
+            self.exibir_cabecalho("Análise de Força Financeira Isolada")
+            print(f"\n{Cores.VERMELHO}✗ Dados não carregados. Use a opção 1 primeiro.{Cores.RESET}")
+            pausar()
+            return
+
+        # Executa o terminal de força isolada
+        self.terminal_forca_isolada.executar(
+            self.seguradoras,
+            self.infos_grupo,
+            self.infos_resseguro
+        )
+
     def executar(self):
         """Loop principal da aplicação"""
         while True:
@@ -763,6 +794,8 @@ class TerminalApp:
                 self.analise_por_categoria()
             elif opcao == '8':
                 self.gerar_relatorios()
+            elif opcao == '9':
+                self.analise_forca_isolada()
             elif opcao == '0':
                 limpar_tela()
                 print(f"\n{Cores.CIANO}{Cores.BOLD}Obrigado por usar o Sistema de Análise Financeira!{Cores.RESET}")
