@@ -41,8 +41,9 @@ output/
 *.html
 *.xlsx
 *.pdf
-# Exception for paper PDF
+# Exception for paper PDFs
 !PAPER_FORCA_FINANCEIRA_ISOLADA.pdf
+!PAPER_ABNT_FORCA_FINANCEIRA_ISOLADA.pdf
 
 # OS files
 .DS_Store
