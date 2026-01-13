@@ -1,9 +1,14 @@
 # Análise Financeira - Crédito de Garantia
 
-Sistema para análise comparativa da força financeira de seguradoras, gerando relatórios detalhados com indicadores de solvência, liquidez, rentabilidade e sinistralidade.
+Sistema completo para análise financeira de seguradoras e **análise jurídica de licitações**, com foco em:
+- Análise comparativa da força financeira de seguradoras
+- Cruzamento de dados entre editais, Lei 14.133/2021 e jurisprudência do TCU
+- Identificação de irregularidades em processos licitatórios
+- Geração de notificações jurídicas e representações
 
 ## Funcionalidades
 
+### Módulo de Análise Financeira
 - **Análise de Indicadores Financeiros**: Calcula automaticamente indicadores de solvência, liquidez, rentabilidade, sinistralidade e estrutura de capital
 - **Score de Força Financeira**: Sistema de pontuação de 0 a 100 que avalia a saúde financeira geral
 - **Rating de Risco**: Classificação de AAA (excelente) a D (inadimplente)
@@ -11,24 +16,40 @@ Sistema para análise comparativa da força financeira de seguradoras, gerando r
 - **Relatórios em Múltiplos Formatos**: HTML interativo, Excel e PDF
 - **Análise de Pontos Fortes e Fracos**: Identificação automática de áreas de destaque e atenção
 
+### Módulo de Análise Jurídica (NOVO)
+- **Base Legal Lei 14.133/2021**: Artigos sobre garantias, habilitação, qualificação econômica
+- **Jurisprudência TCU**: Acórdãos, súmulas e boas práticas sobre licitações
+- **Análise de Irregularidades**: Identificação automática de não-conformidades
+- **Cruzamento de Dados**: Edital x Lei x TCU x Estudos de Rating
+- **Gerador de Notificações**: Notificações de irregularidades, representações ao TCE, pareceres jurídicos
+
 ## Estrutura do Projeto
 
 ```
 .
-├── main.py                          # Script principal
+├── main.py                          # Script principal (análise financeira)
+├── terminal_app.py                  # Aplicação interativa financeira
+├── analise_juridica_cc17.py         # Sistema de Análise Jurídica CC17/2025
 ├── requirements.txt                 # Dependências
 ├── README.md                        # Documentação
 ├── output/                          # Relatórios gerados
 └── src/
     ├── models/
-    │   └── seguradora.py            # Modelos de dados
+    │   └── seguradora.py            # Modelos de dados financeiros
     ├── analysis/
     │   ├── indicadores.py           # Cálculo de indicadores
     │   └── comparador.py            # Comparação entre seguradoras
     ├── reports/
     │   └── gerador_relatorios.py    # Geração de relatórios
-    └── data/
-        └── dados_exemplo.py         # Dados de exemplo
+    ├── data/
+    │   └── dados_exemplo.py         # Dados de exemplo
+    └── juridico/                    # MÓDULO JURÍDICO (NOVO)
+        ├── __init__.py              # Inicialização do módulo
+        ├── base_legal.py            # Lei 14.133/2021 - artigos relevantes
+        ├── referencias_tcu.py       # Acórdãos, súmulas e boas práticas TCU
+        ├── analisador_irregularidades.py  # Análise de irregularidades
+        ├── cruzamento_dados.py      # Motor de cruzamento de dados
+        └── gerador_notificacao.py   # Gerador de documentos jurídicos
 ```
 
 ## Instalação
@@ -70,6 +91,20 @@ python main.py --resumo
 python main.py --individual
 ```
 
+### Análise Jurídica (CC17/2025 - SEAP Manaus)
+
+```bash
+# Executa o sistema de análise jurídica interativo
+python analise_juridica_cc17.py
+```
+
+O sistema oferece:
+1. **Visualização de Dados**: Edital, estudo de rating, seguradoras
+2. **Consulta à Base Legal**: Lei 14.133/2021 por categoria
+3. **Consulta ao TCU**: Acórdãos, súmulas e boas práticas
+4. **Análise Completa**: Cruzamento de dados e identificação de irregularidades
+5. **Geração de Documentos**: Notificações, representações e pareceres
+
 ### Uso Programático
 
 ```python
@@ -104,6 +139,38 @@ indicadores = analisador.calcular_indicadores(seguradora)
 print(f"Score: {indicadores.score_forca_financeira}")
 print(f"Rating: {indicadores.classificacao_risco}")
 print(f"ROE: {indicadores.roe:.1%}")
+```
+
+### Uso do Módulo Jurídico
+
+```python
+from src.juridico.cruzamento_dados import MotorCruzamento, DadosEdital, DadosRating
+from src.juridico.gerador_notificacao import GeradorNotificacao, Destinatario
+
+# Criar motor de cruzamento
+motor = MotorCruzamento()
+
+# Configurar dados do edital
+dados_edital = DadosEdital(
+    numero="CC17/2025",
+    processo="CC17/2025 - CSC",
+    objeto="Contratação de Seguro-Garantia",
+    valor_estimado=50_000_000.00,
+    # ... outros campos
+)
+
+# Executar análise completa
+resultado = motor.executar_analise_completa(dados_edital, dados_rating)
+
+# Gerar notificação
+gerador = GeradorNotificacao()
+notificacao = gerador.gerar_notificacao_irregularidades(
+    resultado_cruzamento=resultado,
+    irregularidades=resultado.irregularidades_encontradas,
+    destinatarios=[Destinatario(nome="...", cargo="...", orgao="...")],
+    notificante="Empresa XYZ",
+    qualificacao_notificante="participante do certame"
+)
 ```
 
 ## Indicadores Calculados
@@ -187,6 +254,48 @@ print(f"ROE: {indicadores.roe:.1%}")
   2º - Zeta Crédito Garantido S.A.: Score 82.3 (Rating AA)
   3º - Beta Crédito S.A.: Score 73.8 (Rating A)
 ```
+
+## Módulo Jurídico - Análise de Licitações
+
+### Funcionalidades Principais
+
+1. **Base Legal (Lei 14.133/2021)**
+   - Artigos sobre garantias (Arts. 96-102)
+   - Habilitação e qualificação (Arts. 62-72)
+   - Sanções e penalidades (Arts. 155-156)
+   - Princípios norteadores (Art. 5º, 11)
+
+2. **Jurisprudência TCU**
+   - Acórdãos sobre seguro-garantia
+   - Acórdãos sobre rating e solidez financeira
+   - Súmulas aplicáveis
+   - Boas práticas em contratações
+
+3. **Tipos de Irregularidades Detectadas**
+   - Omissão de documentos obrigatórios
+   - Garantia contratual inadequada
+   - Descarte de melhor rating por custo
+   - Viés financeiro na seleção
+   - Risco regulatório e jurídico
+   - Violação de princípios licitatórios
+
+4. **Documentos Jurídicos Gerados**
+   - Notificação de Irregularidades
+   - Representação ao TCE
+   - Parecer Jurídico
+   - Relatório de Análise
+
+### Caso de Uso: CC17/2025 - SEAP/AM
+
+O sistema foi desenvolvido para análise do certame CC17/2025 da SEAP Manaus,
+identificando irregularidades na seleção de seguradora para garantia contratual
+com base em estudos de rating financeiro.
+
+**Principais Irregularidades Identificadas:**
+- Descarte de seguradora com rating superior (AA) em favor de outra com rating inferior (BBB+)
+- Seleção baseada exclusivamente em menor preço
+- Desconsideração de estudo técnico de rating
+- Exposição do Estado a risco regulatório
 
 ## Licença
 
