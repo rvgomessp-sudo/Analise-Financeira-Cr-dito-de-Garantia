@@ -1,0 +1,40 @@
+{
+  "zurich_brasil": {
+    "nome": "Zurich Minas Brasil Seguros S.A.",
+    "tipo": "Subsidiária de Grupo Internacional",
+    "controladora": "Zurich Insurance Group Ltd",
+    "patrimonio_liquido_brl": 850000000,
+    "ativo_total_brl": 2800000000,
+    "premios_emitidos_brl": 2200000000,
+    "lucro_liquido_brl": 220000000,
+    "rating_declarado": "AA",
+    "tipo_rating": "Rating do Grupo (emprestado)",
+    "rating_isolado": "A",
+    "gap_rating": 3,
+    "suporte_grupo_brl": 231000000000,
+    "nota_seguranca": "A+"
+  },
+  "junto_seguros": {
+    "nome": "Junto Seguros S.A.",
+    "tipo": "Seguradora Nacional Independente",
+    "controladora": null,
+    "patrimonio_liquido_brl": 650000000,
+    "ativo_total_brl": 1800000000,
+    "premios_emitidos_brl": 801100000,
+    "lucro_liquido_brl": 145000000,
+    "rating_declarado": "brAAA",
+    "tipo_rating": "Rating Próprio (força isolada)",
+    "rating_isolado": "brAAA",
+    "gap_rating": 0,
+    "suporte_grupo_brl": 0,
+    "nota_seguranca": "A+"
+  },
+  "comparacao": {
+    "pl_zurich_maior_que_junto": true,
+    "diferenca_pl_brl": 200000000,
+    "zurich_tem_suporte_grupo": true,
+    "junto_tem_suporte_grupo": false,
+    "zurich_rating_inflado": true,
+    "junto_rating_inflado": false
+  }
+}
