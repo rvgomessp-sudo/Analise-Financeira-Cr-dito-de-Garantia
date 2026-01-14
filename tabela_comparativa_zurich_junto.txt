@@ -1,0 +1,39 @@
+====================================================================================================
+COMPARATIVO DE ESTRUTURA SOCIETÁRIA E INDICADORES (BRL)
+====================================================================================================
+
+📊 ESTRUTURA SOCIETÁRIA:
+----------------------------------------------------------------------------------------------------
+Seguradora                     Tipo                 Origem          Suporte Grupo  
+----------------------------------------------------------------------------------------------------
+Zurich Seguros                 Subsidiária Brasileira Internacional   Sim            
+Junto Seguros                  Matriz               Nacional        Não            
+
+💰 INDICADORES FINANCEIROS (R$):
+----------------------------------------------------------------------------------------------------
+Seguradora                PL (MM)         Ativo (MM)      Prêmios (MM)    Lucro (MM)     
+----------------------------------------------------------------------------------------------------
+Zurich Seguros                   850.0        2,800.0        2,200.0          220.0
+Junto Seguros                    650.0        1,800.0          801.1          145.0
+
+⭐ RATING E FORÇA FINANCEIRA:
+----------------------------------------------------------------------------------------------------
+Seguradora                Rating Dec.  Tipo Rating          Rating Calc. Gap     
+----------------------------------------------------------------------------------------------------
+Zurich Seguros            AA           Rating do Grupo (emprestado) A            +3      
+Junto Seguros             brAAA        Rating Próprio (força isolada) brAAA        0       
+
+🛡️ SEGURANÇA DA APÓLICE:
+----------------------------------------------------------------------------------------------------
+
+Zurich Seguros:
+  Nota de Segurança: A+
+  Parecer: ALTA SEGURANÇA - Subsidiária integral do Zurich Insurance Group, um dos maiores grupos seguradores do mundo. O suporte do grupo garante capacidade de pagamento mesmo em cenários adversos. Rating AA reflete a força do grupo controlador.
+  ✅ Pontos Fortes: Suporte integral do Zurich Insurance Group (AA global), Patrimônio do grupo > USD 42 bilhões, Presença em 210 países
+  ⚠️ Atenção: Rating da entidade brasileira isolada seria inferior (A), Dependência do suporte do grupo
+
+Junto Seguros:
+  Nota de Segurança: A+
+  Parecer: ALTA SEGURANÇA - Seguradora nacional líder em Seguro Garantia (16% de market share). Rating brAAA da S&P representa a máxima classificação em escala nacional brasileira. Força financeira PRÓPRIA - não depende de suporte de grupo internacional. 33 anos de operação especializada no mercado brasileiro.
+  ✅ Pontos Fortes: Rating brAAA S&P (máximo em escala nacional), Rating A- AM Best com outlook positivo, Líder de mercado em Seguro Garantia (16% market share)
+  ⚠️ Atenção: Concentração em Seguro Garantia, Porte menor que subsidiárias de grupos internacionais
