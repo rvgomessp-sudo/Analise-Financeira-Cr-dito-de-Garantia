@@ -367,37 +367,119 @@
       "forca": 5,
       "casos_aplicaveis": ["Todas as licitações"],
       "status": "consolidado"
+    },
+    {
+      "id": "CON-002",
+      "categoria": "Contratual",
+      "subcategoria": "Escala",
+      "titulo": "SEAP/AM: Contradição entre cláusulas 54.4.2 e 54.5",
+      "argumento": "CONTRADIÇÃO NO EDITAL SEAP/AM: A cláusula 54.5 aceita 'companhia seguradora nacional ou ESTRANGEIRA autorizada a funcionar no Brasil'. A cláusula 54.4.2 exige 'classificação de força financeira EM ESCALA NACIONAL'. PROBLEMA: Seguradoras estrangeiras (como Zurich, Chubb, Allianz) NÃO possuem rating em escala nacional 'br' - possuem rating GLOBAL. Exigir rating 'br' de estrangeiras torna a permissão da cláusula 54.5 LETRA MORTA. Interpretação correta: 'em escala nacional' = parâmetro de comparação equivalente a brAA.",
+      "fundamento": "Princípio da interpretação sistemática; Princípio da eficácia das normas",
+      "fonte": "Edital SEAP/AM - Processo 01.01.041101.005031/2025-15",
+      "tags": ["#SEAP-AM", "#contradição", "#estrangeira", "#54.4.2", "#54.5", "#edital"],
+      "contra_argumento": "As cláusulas são independentes; a 54.4.2 é requisito adicional.",
+      "refutacao": "A interpretação sistemática exige que as cláusulas sejam harmonizadas. Se 54.5 aceita estrangeiras, 54.4.2 não pode impor condição que APENAS nacionais cumprem. Isso violaria o princípio da eficácia das normas.",
+      "forca": 5,
+      "casos_aplicaveis": ["SEAP/AM", "Editais com dupla exigência"],
+      "status": "consolidado"
+    },
+    {
+      "id": "RAT-010",
+      "categoria": "Rating",
+      "subcategoria": "Escala",
+      "titulo": "Rating AA global atende requisito 'superior ou igual a brAA'",
+      "argumento": "O edital SEAP/AM exige rating 'superior ou igual a Aa2.br, brAA ou A(bra)'. A Zurich possui rating AA (S&P/Fitch) e Aa2 (Moody's) em escala GLOBAL. ANÁLISE: (1) AA global é SUPERIOR a brAA nacional na hierarquia de risco; (2) O edital aceita rating 'SUPERIOR'; (3) Pelo mapeamento S&P, brAA ≈ B+ global; (4) AA global está 10+ notches ACIMA de B+. CONCLUSÃO: AA global atende plenamente o requisito de ser 'superior ou igual a brAA'.",
+      "fundamento": "Tabelas de mapeamento S&P; Edital SEAP/AM cláusula 54.4.2",
+      "fonte": "Edital SEAP/AM; S&P National Scale Mapping",
+      "tags": ["#SEAP-AM", "#AA", "#brAA", "#superior", "#mapeamento", "#54.4.2"],
+      "contra_argumento": "O rating deve ser literalmente 'brAA' na nomenclatura.",
+      "refutacao": "Se assim fosse, a expressão 'superior' seria inútil (brAAA é o máximo da escala br). A única forma de ter rating SUPERIOR é via escala global. O edital admite 'superior', logo admite global.",
+      "forca": 5,
+      "casos_aplicaveis": ["SEAP/AM", "Zurich"],
+      "status": "consolidado"
+    },
+    {
+      "id": "CON-003",
+      "categoria": "Contratual",
+      "subcategoria": "Metodologia",
+      "titulo": "SEAP/AM: Inconsistência nos ratings mínimos entre agências",
+      "argumento": "O edital SEAP/AM exige ratings diferentes por agência: Moody's Aa2.br, S&P brAA, Fitch A(bra). INCONSISTÊNCIA: (1) Aa2 e AA são equivalentes (2º melhor nível); (2) A é 3º melhor nível. O edital aceita A(bra) da Fitch mas exige AA das outras. IMPLICAÇÃO: O padrão real de exigência é VARIÁVEL. Se aceita A(bra), deveria aceitar qualquer rating de qualidade igual ou superior, incluindo AA global.",
+      "fundamento": "Princípio da isonomia; Análise comparativa de escalas",
+      "fonte": "Edital SEAP/AM cláusula 54.4.2",
+      "tags": ["#SEAP-AM", "#inconsistência", "#Fitch", "#Moody's", "#S&P", "#isonomia"],
+      "contra_argumento": "As agências têm metodologias diferentes; não são diretamente comparáveis.",
+      "refutacao": "Se não são comparáveis, o edital não poderia listá-las como alternativas equivalentes. Ao fazê-lo, reconhece implicitamente a comparabilidade. A inconsistência favorece interpretação flexível.",
+      "forca": 4,
+      "casos_aplicaveis": ["SEAP/AM"],
+      "status": "consolidado"
+    },
+    {
+      "id": "PRO-004",
+      "categoria": "Processual",
+      "subcategoria": "Escala",
+      "titulo": "Princípio da eficácia das normas - cláusula não pode ser letra morta",
+      "argumento": "PRINCÍPIO DA EFICÁCIA: Nenhuma cláusula do edital pode ser interpretada como LETRA MORTA. Se a cláusula 54.5 aceita seguradoras estrangeiras, essa permissão deve ter EFEITO PRÁTICO. Interpretar 54.4.2 como exigência de rating 'br' ANULARIA a cláusula 54.5, pois seguradoras estrangeiras não têm rating 'br'. CONCLUSÃO: A interpretação deve preservar a eficácia de AMBAS as cláusulas.",
+      "fundamento": "Hermenêutica jurídica; Princípio da eficácia das normas",
+      "fonte": "Lei 14.133/2021; Doutrina de interpretação contratual",
+      "tags": ["#eficácia", "#letra-morta", "#interpretação", "#54.5", "#hermenêutica"],
+      "contra_argumento": "A cláusula 54.5 se aplica apenas a seguradoras estrangeiras que obtiveram rating br.",
+      "refutacao": "Seguradoras estrangeiras subsidiárias de grupos globais NÃO obtêm rating 'br' por metodologia das agências. Exigir o impossível não é razoável. A interpretação deve buscar resultado possível e lógico.",
+      "forca": 5,
+      "casos_aplicaveis": ["SEAP/AM", "Editais com dupla exigência"],
+      "status": "consolidado"
+    },
+    {
+      "id": "REG-003",
+      "categoria": "Regulatório",
+      "subcategoria": "Escala",
+      "titulo": "Circular SUSEP 662/2022 não exige rating em escala específica",
+      "argumento": "O edital SEAP/AM cita a Circular SUSEP 662/2022 como norma aplicável (cláusula 54.5). ANÁLISE: A Circular 662/2022 dispõe sobre seguro garantia mas NÃO estabelece exigência de rating em escala específica. Os requisitos são: autorização SUSEP, política de subscrição, condições da apólice. O edital ADICIONA exigência de rating que NÃO consta na norma regulatória.",
+      "fundamento": "Circular SUSEP 662/2022",
+      "fonte": "https://www2.susep.gov.br/safe/scripts/bnweb/bnmapi.exe?router=upload/25882",
+      "tags": ["#SUSEP", "#662/2022", "#regulatório", "#rating", "#não-exigido"],
+      "contra_argumento": "O edital pode estabelecer requisitos adicionais aos da SUSEP.",
+      "refutacao": "Verdadeiro, mas requisitos adicionais devem ser RAZOÁVEIS e não podem criar barreiras injustificadas à competitividade (Lei 14.133/2021, art. 5º).",
+      "forca": 4,
+      "casos_aplicaveis": ["SEAP/AM", "Todas as licitações"],
+      "status": "consolidado"
     }
   ],
   "indices": {
     "por_tag": {
-      "#zurich": ["RAT-003", "RAT-004", "EST-001", "EST-003", "EST-004", "REG-002", "MET-001", "RAT-008", "MET-003"],
+      "#zurich": ["RAT-003", "RAT-004", "EST-001", "EST-003", "EST-004", "REG-002", "MET-001", "RAT-008", "MET-003", "RAT-010"],
       "#junto": ["RAT-004", "EST-002", "EST-003", "EST-005", "RAT-009"],
       "#nacional": ["RAT-001", "RAT-002", "REG-001", "CON-001", "EST-002", "EST-005", "RAT-009"],
-      "#global": ["RAT-001", "RAT-002", "RAT-003", "RAT-008"],
+      "#global": ["RAT-001", "RAT-002", "RAT-003", "RAT-008", "RAT-010"],
       "#subsidiária": ["RAT-004", "RAT-005", "RAT-006", "EST-001", "REG-002", "MET-002", "MET-003"],
-      "#escala": ["RAT-001", "RAT-002", "RAT-007", "REG-001", "CON-001"],
-      "#metodologia": ["RAT-001", "RAT-004", "RAT-005", "RAT-006", "MET-001", "MET-002", "MET-003"],
+      "#escala": ["RAT-001", "RAT-002", "RAT-007", "REG-001", "CON-001", "CON-002", "RAT-010"],
+      "#metodologia": ["RAT-001", "RAT-004", "RAT-005", "RAT-006", "MET-001", "MET-002", "MET-003", "CON-003"],
       "#isolado": ["RAT-005", "EST-002", "EST-003", "MET-002"],
       "#grupo": ["RAT-004", "RAT-005", "EST-003", "EST-004", "MET-001"],
-      "#interpretação": ["RAT-001", "RAT-007", "CON-001", "PRO-001", "PRO-002"],
+      "#interpretação": ["RAT-001", "RAT-007", "CON-001", "PRO-001", "PRO-002", "PRO-004"],
       "#brAAA": ["RAT-003", "RAT-007", "EST-002", "EST-005", "RAT-009"],
-      "#AA": ["RAT-003", "RAT-008"],
+      "#AA": ["RAT-003", "RAT-008", "RAT-010"],
+      "#brAA": ["RAT-010"],
       "#core": ["RAT-006", "EST-001", "MET-002", "MET-003"],
       "#SACP": ["RAT-005", "MET-002"],
       "#suporte": ["MET-001", "MET-003"],
       "#licitação": ["PRO-001", "PRO-003"],
-      "#princípio": ["PRO-001", "PRO-002"]
+      "#princípio": ["PRO-001", "PRO-002", "PRO-004"],
+      "#SEAP-AM": ["CON-002", "RAT-010", "CON-003", "PRO-004", "REG-003"],
+      "#contradição": ["CON-001", "CON-002"],
+      "#eficácia": ["PRO-004"],
+      "#SUSEP": ["REG-001", "REG-002", "REG-003"],
+      "#estrangeira": ["CON-001", "CON-002", "REG-002"]
     },
     "por_caso": {
-      "Zurich": ["RAT-003", "RAT-004", "RAT-005", "RAT-006", "EST-001", "EST-003", "EST-004", "REG-002", "MET-001", "MET-002", "RAT-008", "MET-003"],
+      "Zurich": ["RAT-003", "RAT-004", "RAT-005", "RAT-006", "EST-001", "EST-003", "EST-004", "REG-002", "MET-001", "MET-002", "RAT-008", "MET-003", "RAT-010"],
       "Junto": ["EST-002", "EST-003", "EST-005", "RAT-009"],
       "Licitações Federais": ["RAT-001", "RAT-002", "RAT-007", "REG-001", "CON-001", "PRO-001", "PRO-002", "PRO-003"],
-      "Análises comparativas": ["EST-003", "RAT-004"]
+      "Análises comparativas": ["EST-003", "RAT-004"],
+      "SEAP/AM": ["CON-002", "RAT-010", "CON-003", "PRO-004", "REG-003", "RAT-001", "RAT-007", "CON-001", "PRO-001", "PRO-002"]
     },
     "por_forca": {
-      "5": ["RAT-001", "RAT-002", "RAT-003", "RAT-004", "RAT-007", "EST-002", "CON-001", "PRO-001", "PRO-002", "RAT-008", "RAT-009", "PRO-003"],
-      "4": ["RAT-005", "RAT-006", "EST-001", "EST-003", "REG-001", "REG-002", "MET-001", "MET-002", "EST-004", "EST-005", "MET-003"]
+      "5": ["RAT-001", "RAT-002", "RAT-003", "RAT-004", "RAT-007", "EST-002", "CON-001", "PRO-001", "PRO-002", "RAT-008", "RAT-009", "PRO-003", "CON-002", "RAT-010", "PRO-004"],
+      "4": ["RAT-005", "RAT-006", "EST-001", "EST-003", "REG-001", "REG-002", "MET-001", "MET-002", "EST-004", "EST-005", "MET-003", "CON-003", "REG-003"]
     }
   }
 }
