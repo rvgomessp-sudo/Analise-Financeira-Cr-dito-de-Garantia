@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rating de Seguradoras em Licitações Públicas | Sistema de Argumentos</title>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2c5282;
+            --accent: #3182ce;
+            --success: #38a169;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+            --light: #f7fafc;
+            --dark: #1a202c;
+            --gray: #718096;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f0 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px;
+            background: white;
+            margin: -20px 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px 20px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+            text-transform: uppercase;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray);
+            transition: all 0.3s;
+        }
+
+        .nav-tab:hover {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .card-id {
+            background: var(--primary);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            color: var(--primary);
+            flex: 1;
+            margin-left: 15px;
+        }
+
+        .card-strength {
+            display: flex;
+            gap: 3px;
+        }
+
+        .strength-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e2e8f0;
+        }
+
+        .strength-dot.filled {
+            background: var(--success);
+        }
+
+        .card-category {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 10px;
+        }
+
+        .card-argument {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .card-section {
+            margin-bottom: 12px;
+        }
+
+        .card-section-title {
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        .card-section-content {
+            color: #4a5568;
+            font-size: 0.95rem;
+        }
+
+        /* Tags */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .tag {
+            background: #e2e8f0;
+            color: var(--secondary);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tag:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Contradiction Box */
+        .contradiction-box {
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+            border: 2px solid var(--danger);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .contradiction-box h3 {
+            color: var(--danger);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contradiction-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .clause-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .clause-number {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .vs-circle {
+            width: 50px;
+            height: 50px;
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:hover {
+            background: var(--light);
+        }
+
+        .check {
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .cross {
+            color: var(--danger);
+            font-weight: bold;
+        }
+
+        /* Search and Filter */
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .filter-select {
+            padding: 12px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* Paper Section */
+        .paper-section {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .paper-title {
+            text-align: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .paper-subtitle {
+            text-align: center;
+            font-style: italic;
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+
+        .abstract {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .abstract h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .keywords {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 15px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .contradiction-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .vs-circle {
+                margin: 10px auto;
+            }
+
+            .stats-bar {
+                margin: -20px 10px 30px;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .nav-tabs, .search-filter {
+                display: none;
+            }
+
+            .card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Rating de Seguradoras em Licitações Públicas</h1>
+        <p>Sistema Codificado de Argumentos Jurídicos | Análise SEAP/AM</p>
+    </header>
+
+    <div class="container">
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number">25</div>
+                <div class="stat-label">Argumentos</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">15</div>
+                <div class="stat-label">Força 5/5</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">6</div>
+                <div class="stat-label">Categorias</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">23</div>
+                <div class="stat-label">Tags</div>
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('resumo')">Resumo</button>
+            <button class="nav-tab" onclick="showSection('argumentos')">Argumentos</button>
+            <button class="nav-tab" onclick="showSection('seap')">Caso SEAP/AM</button>
+            <button class="nav-tab" onclick="showSection('paper')">Paper ABNT</button>
+        </div>
+
+        <!-- RESUMO -->
+        <div id="resumo" class="content-section active">
+            <div class="contradiction-box">
+                <h3>⚠️ CONTRADIÇÃO PRINCIPAL IDENTIFICADA</h3>
+                <div class="contradiction-grid">
+                    <div class="clause-box">
+                        <div class="clause-number">Cláusula 54.5</div>
+                        <p>"nacional ou <strong>ESTRANGEIRA</strong> autorizada"</p>
+                        <small>✓ Aceita Zurich, Chubb, Allianz</small>
+                    </div>
+                    <div class="vs-circle">VS</div>
+                    <div class="clause-box">
+                        <div class="clause-number">Cláusula 54.4.2</div>
+                        <p>"rating <strong>EM ESCALA NACIONAL</strong>"</p>
+                        <small>✗ Estrangeiras não têm rating "br"</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="color: var(--primary); margin-bottom: 20px;">Tese Central</h3>
+                <div class="card-argument">
+                    <p><strong>A expressão "em escala nacional" define o PARÂMETRO DE COMPARAÇÃO (benchmark), não a origem do rating.</strong></p>
+                    <p style="margin-top: 10px;">Rating AA global é hierarquicamente SUPERIOR a brAA nacional, atendendo o requisito "superior ou igual".</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="color: var(--primary); margin-bottom: 20px;">Comparativo: Zurich vs. Junto</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Métrica</th>
+                            <th>Zurich Brasil</th>
+                            <th>Junto Seguros</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Rating Declarado</td>
+                            <td><strong>AA (global)</strong></td>
+                            <td><strong>brAAA (nacional)</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Rating Isolado</td>
+                            <td>~A (estimado)</td>
+                            <td>brAAA</td>
+                        </tr>
+                        <tr>
+                            <td>GAP</td>
+                            <td>~3 notches</td>
+                            <td><span class="check">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>Suporte Grupo</td>
+                            <td>R$ 231 bilhões</td>
+                            <td>Nenhum</td>
+                        </tr>
+                        <tr>
+                            <td>Prob. Default 10 anos</td>
+                            <td><span class="check">~0.03%</span></td>
+                            <td>~1-2%</td>
+                        </tr>
+                        <tr>
+                            <td>Atende Edital?</td>
+                            <td><span class="check">✓ SIM (superior)</span></td>
+                            <td><span class="check">✓ SIM (igual)</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ARGUMENTOS -->
+        <div id="argumentos" class="content-section">
+            <div class="search-filter">
+                <input type="text" class="search-box" placeholder="Buscar argumento..." onkeyup="filterArguments(this.value)">
+                <select class="filter-select" onchange="filterByCategory(this.value)">
+                    <option value="">Todas Categorias</option>
+                    <option value="Rating">Rating (RAT)</option>
+                    <option value="Estrutura">Estrutura (EST)</option>
+                    <option value="Regulatório">Regulatório (REG)</option>
+                    <option value="Contratual">Contratual (CON)</option>
+                    <option value="Processual">Processual (PRO)</option>
+                    <option value="Metodológico">Metodológico (MET)</option>
+                </select>
+                <select class="filter-select" onchange="filterByStrength(this.value)">
+                    <option value="">Todas Forças</option>
+                    <option value="5">Força 5/5</option>
+                    <option value="4">Força 4/5</option>
+                </select>
+            </div>
+
+            <div id="arguments-container">
+                <!-- RAT-001 -->
+                <div class="card argument-card" data-category="Rating" data-strength="5">
+                    <div class="card-header">
+                        <span class="card-id">RAT-001</span>
+                        <span class="card-title">Diferença entre 'escala nacional' e 'rating emitido no país'</span>
+                        <div class="card-strength">
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                        </div>
+                    </div>
+                    <div class="card-category">Rating > Escala</div>
+                    <div class="card-argument">
+                        A expressão 'em escala nacional' define o PARÂMETRO DE COMPARAÇÃO (benchmark), não a ORIGEM ou LOCAL de emissão do rating. São conceitos distintos: um é critério de mensuração, outro é critério geográfico de emissão.
+                    </div>
+                    <div class="card-section">
+                        <div class="card-section-title">Contra-argumento</div>
+                        <div class="card-section-content">O edital exige 'rating em escala nacional', portanto a escala deve ser obrigatoriamente a escala 'br' ou 'bra'.</div>
+                    </div>
+                    <div class="card-section">
+                        <div class="card-section-title">Refutação</div>
+                        <div class="card-section-content">Se o edital admite 'rating SUPERIOR a brAAA', implicitamente aceita ratings fora da escala nacional, pois brAAA é o teto.</div>
+                    </div>
+                    <div class="tags">
+                        <span class="tag">#escala</span>
+                        <span class="tag">#nacional</span>
+                        <span class="tag">#global</span>
+                        <span class="tag">#metodologia</span>
+                        <span class="tag">#interpretação</span>
+                    </div>
+                </div>
+
+                <!-- RAT-007 -->
+                <div class="card argument-card" data-category="Rating" data-strength="5">
+                    <div class="card-header">
+                        <span class="card-id">RAT-007</span>
+                        <span class="card-title">Expressão 'igual ou SUPERIOR' implica ratings fora da escala nacional</span>
+                        <div class="card-strength">
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                        </div>
+                    </div>
+                    <div class="card-category">Rating > Escala</div>
+                    <div class="card-argument">
+                        ANÁLISE LÓGICA: Se brAAA é o TETO MÁXIMO da escala nacional, então 'Superior a brAAA' = impossível dentro da escala nacional. A expressão 'igual ou superior' só faz sentido se admitir ratings em escala GLOBAL.
+                    </div>
+                    <div class="card-section">
+                        <div class="card-section-title">Contra-argumento</div>
+                        <div class="card-section-content">'Superior' seria apenas figura de linguagem ou redundância.</div>
+                    </div>
+                    <div class="card-section">
+                        <div class="card-section-title">Refutação</div>
+                        <div class="card-section-content">Em documentos jurídicos como editais, presume-se que todas as palavras têm significado. Interpretar 'superior' como redundância viola o princípio da eficácia das normas.</div>
+                    </div>
+                    <div class="tags">
+                        <span class="tag">#interpretação</span>
+                        <span class="tag">#lógica</span>
+                        <span class="tag">#superior</span>
+                        <span class="tag">#brAAA</span>
+                        <span class="tag">#teto</span>
+                    </div>
+                </div>
+
+                <!-- CON-001 -->
+                <div class="card argument-card" data-category="Contratual" data-strength="5">
+                    <div class="card-header">
+                        <span class="card-id">CON-001</span>
+                        <span class="card-title">Edital aceita estrangeiras + exige rating nacional = contradição</span>
+                        <div class="card-strength">
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                        </div>
+                    </div>
+                    <div class="card-category">Contratual > Escala</div>
+                    <div class="card-argument">
+                        CONTRADIÇÃO LÓGICA: Seguradoras estrangeiras têm rating GLOBAL. Exigir rating 'br' anula na prática a permissão de 'estrangeiras'. INTERPRETAÇÃO CORRETA: 'em escala nacional' = parâmetro de comparação, não restrição de origem.
+                    </div>
+                    <div class="card-section">
+                        <div class="card-section-title">Contra-argumento</div>
+                        <div class="card-section-content">O edital pode exigir que seguradoras estrangeiras obtenham rating na escala brasileira.</div>
+                    </div>
+                    <div class="card-section">
+                        <div class="card-section-title">Refutação</div>
+                        <div class="card-section-content">Agências de rating não emitem classificação em escala nacional para subsidiárias 'core' de grupos globais porque isso DISTORCERIA a análise de crédito.</div>
+                    </div>
+                    <div class="tags">
+                        <span class="tag">#edital</span>
+                        <span class="tag">#contradição</span>
+                        <span class="tag">#estrangeira</span>
+                        <span class="tag">#nacional</span>
+                    </div>
+                </div>
+
+                <!-- PRO-001 -->
+                <div class="card argument-card" data-category="Processual" data-strength="5">
+                    <div class="card-header">
+                        <span class="card-id">PRO-001</span>
+                        <span class="card-title">Princípio da competitividade em licitações</span>
+                        <div class="card-strength">
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                        </div>
+                    </div>
+                    <div class="card-category">Processual > Escala</div>
+                    <div class="card-argument">
+                        A Lei 14.133/2021, art. 5º, IV, estabelece o princípio da COMPETITIVIDADE. Interpretar 'escala nacional' de forma restritiva reduz artificialmente competidores e pode configurar direcionamento.
+                    </div>
+                    <div class="card-section">
+                        <div class="card-section-title">Fundamento</div>
+                        <div class="card-section-content">Lei 14.133/2021 art. 5º, IV - Competitividade</div>
+                    </div>
+                    <div class="tags">
+                        <span class="tag">#competitividade</span>
+                        <span class="tag">#licitação</span>
+                        <span class="tag">#princípio</span>
+                        <span class="tag">#lei</span>
+                    </div>
+                </div>
+
+                <!-- PRO-002 -->
+                <div class="card argument-card" data-category="Processual" data-strength="5">
+                    <div class="card-header">
+                        <span class="card-id">PRO-002</span>
+                        <span class="card-title">Princípio da razoabilidade administrativa</span>
+                        <div class="card-strength">
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                        </div>
+                    </div>
+                    <div class="card-category">Processual > Metodologia</div>
+                    <div class="card-argument">
+                        ABSURDO: Aceitar seguradora local com brAAA (≈BB global, risco moderado) e rejeitar seguradora global com AA (risco muito baixo). Interpretação que rejeita maior qualidade em favor de menor qualidade viola a razoabilidade.
+                    </div>
+                    <div class="card-section">
+                        <div class="card-section-title">Fundamento</div>
+                        <div class="card-section-content">Lei 9.784/99 art. 2º - Razoabilidade</div>
+                    </div>
+                    <div class="tags">
+                        <span class="tag">#razoabilidade</span>
+                        <span class="tag">#princípio</span>
+                        <span class="tag">#absurdo</span>
+                        <span class="tag">#qualidade</span>
+                    </div>
+                </div>
+
+                <!-- CON-002 -->
+                <div class="card argument-card" data-category="Contratual" data-strength="5">
+                    <div class="card-header">
+                        <span class="card-id">CON-002</span>
+                        <span class="card-title">SEAP/AM: Contradição entre cláusulas 54.4.2 e 54.5</span>
+                        <div class="card-strength">
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                        </div>
+                    </div>
+                    <div class="card-category">Contratual > Escala</div>
+                    <div class="card-argument">
+                        CONTRADIÇÃO NO EDITAL SEAP/AM: A cláusula 54.5 aceita 'companhia seguradora nacional ou ESTRANGEIRA'. A cláusula 54.4.2 exige 'rating EM ESCALA NACIONAL'. Exigir rating 'br' de estrangeiras torna a cláusula 54.5 LETRA MORTA.
+                    </div>
+                    <div class="tags">
+                        <span class="tag">#SEAP-AM</span>
+                        <span class="tag">#contradição</span>
+                        <span class="tag">#estrangeira</span>
+                        <span class="tag">#54.4.2</span>
+                        <span class="tag">#54.5</span>
+                    </div>
+                </div>
+
+                <!-- RAT-010 -->
+                <div class="card argument-card" data-category="Rating" data-strength="5">
+                    <div class="card-header">
+                        <span class="card-id">RAT-010</span>
+                        <span class="card-title">Rating AA global atende requisito 'superior ou igual a brAA'</span>
+                        <div class="card-strength">
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                        </div>
+                    </div>
+                    <div class="card-category">Rating > Escala</div>
+                    <div class="card-argument">
+                        A Zurich possui rating AA (S&P/Fitch) e Aa2 (Moody's) em escala GLOBAL. AA global é SUPERIOR a brAA nacional na hierarquia de risco. Pelo mapeamento S&P, brAA ≈ B+ global; AA global está 10+ notches ACIMA.
+                    </div>
+                    <div class="tags">
+                        <span class="tag">#SEAP-AM</span>
+                        <span class="tag">#AA</span>
+                        <span class="tag">#brAA</span>
+                        <span class="tag">#superior</span>
+                        <span class="tag">#zurich</span>
+                    </div>
+                </div>
+
+                <!-- PRO-004 -->
+                <div class="card argument-card" data-category="Processual" data-strength="5">
+                    <div class="card-header">
+                        <span class="card-id">PRO-004</span>
+                        <span class="card-title">Princípio da eficácia das normas - cláusula não pode ser letra morta</span>
+                        <div class="card-strength">
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                            <span class="strength-dot filled"></span>
+                        </div>
+                    </div>
+                    <div class="card-category">Processual > Escala</div>
+                    <div class="card-argument">
+                        PRINCÍPIO DA EFICÁCIA: Nenhuma cláusula do edital pode ser interpretada como LETRA MORTA. Se a cláusula 54.5 aceita seguradoras estrangeiras, essa permissão deve ter EFEITO PRÁTICO.
+                    </div>
+                    <div class="tags">
+                        <span class="tag">#eficácia</span>
+                        <span class="tag">#letra-morta</span>
+                        <span class="tag">#interpretação</span>
+                        <span class="tag">#hermenêutica</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEAP/AM -->
+        <div id="seap" class="content-section">
+            <div class="card">
+                <h3 style="color: var(--primary); margin-bottom: 20px;">📋 Edital SEAP/AM - Processo 01.01.041101.005031/2025-15</h3>
+
+                <div class="card-section">
+                    <div class="card-section-title">Cláusula 54.4.2 - Seguro-Garantia</div>
+                    <div class="card-argument">
+                        "Seguro-garantia, fornecido por <strong>companhia seguradora autorizada a funcionar no Brasil</strong>, com <strong>classificação de força financeira em escala nacional</strong> superior ou igual a <strong>'Aa2.br', 'brAA' ou 'A(bra)'</strong>, conforme divulgado pelas agências de risco Moody's, Standard & Poors ou Fitch"
+                    </div>
+                </div>
+
+                <div class="card-section">
+                    <div class="card-section-title">Cláusula 54.5 - Emissão</div>
+                    <div class="card-argument">
+                        "Na hipótese de a GARANTIA DE PROPOSTA ser prestada na modalidade de seguro-garantia, deverá ser emitida por <strong>companhia seguradora nacional ou estrangeira autorizada a funcionar no Brasil</strong>, nos termos da legislação vigente"
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="color: var(--primary); margin-bottom: 20px;">🔍 Análise dos Requisitos</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Requisito</th>
+                            <th>Zurich</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>"Nacional ou estrangeira"</td>
+                            <td>Subsidiária de grupo suíço</td>
+                            <td><span class="check">✓ ATENDE</span></td>
+                        </tr>
+                        <tr>
+                            <td>"Autorizada a funcionar no Brasil"</td>
+                            <td>SUSEP código 05495</td>
+                            <td><span class="check">✓ ATENDE</span></td>
+                        </tr>
+                        <tr>
+                            <td>"Com classificação de força financeira"</td>
+                            <td>AA (S&P/Fitch), Aa2 (Moody's)</td>
+                            <td><span class="check">✓ ATENDE</span></td>
+                        </tr>
+                        <tr>
+                            <td>"Superior ou igual a brAA"</td>
+                            <td>AA global > brAA nacional</td>
+                            <td><span class="check">✓ SUPERIOR</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3 style="color: var(--primary); margin-bottom: 20px;">⚖️ Argumentos Aplicáveis ao Caso</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Argumento</th>
+                            <th>Força</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>CON-002</strong></td>
+                            <td>Contradição específica 54.4.2 vs 54.5</td>
+                            <td>5/5</td>
+                        </tr>
+                        <tr>
+                            <td><strong>RAT-010</strong></td>
+                            <td>AA global atende "superior ou igual a brAA"</td>
+                            <td>5/5</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PRO-004</strong></td>
+                            <td>Princípio da eficácia das normas</td>
+                            <td>5/5</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CON-003</strong></td>
+                            <td>Inconsistência nos ratings mínimos entre agências</td>
+                            <td>4/5</td>
+                        </tr>
+                        <tr>
+                            <td><strong>REG-003</strong></td>
+                            <td>Circular SUSEP 662/2022 não exige escala específica</td>
+                            <td>4/5</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PAPER -->
+        <div id="paper" class="content-section">
+            <div class="paper-section">
+                <h2 class="paper-title">Rating de Seguradoras em Licitações Públicas</h2>
+                <p class="paper-subtitle">Análise da Exigência de Escala Nacional e suas Implicações Jurídico-Metodológicas</p>
+
+                <div class="abstract">
+                    <h4>Resumo</h4>
+                    <p>Este artigo analisa a exigência de rating de força financeira em escala nacional para seguradoras em processos licitatórios brasileiros, investigando a compatibilidade dessa exigência com a participação de seguradoras estrangeiras autorizadas pela SUSEP. Demonstra-se que a exigência literal de rating "br" para seguradoras subsidiárias de grupos globais configura contradição lógica e violação dos princípios da competitividade e razoabilidade. Conclui-se que a expressão "em escala nacional" deve ser interpretada como parâmetro de comparação (benchmark), não como restrição à origem do rating.</p>
+                    <p class="keywords"><strong>Palavras-chave:</strong> Rating de seguradoras. Licitações públicas. Escala nacional. Seguro garantia. Competitividade.</p>
+                </div>
+
+                <h3 style="color: var(--primary); margin: 20px 0 15px;">1. Introdução</h3>
+                <p>O seguro garantia tem assumido papel cada vez mais relevante nas contratações públicas brasileiras, especialmente após a Lei 14.133/2021. A questão central é: como interpretar a exigência de rating "em escala nacional" quando o edital aceita seguradoras estrangeiras?</p>
+
+                <h3 style="color: var(--primary); margin: 20px 0 15px;">2. Escala Nacional vs. Global</h3>
+                <p>A escala nacional possui teto definido pelo rating soberano do país. No Brasil, brAAA equivale aproximadamente a BB em escala global. Um rating AA global está 7-10 notches ACIMA do equivalente de brAAA.</p>
+
+                <h3 style="color: var(--primary); margin: 20px 0 15px;">3. Conclusão</h3>
+                <p>A expressão "em escala nacional" deve ser entendida como benchmark de comparação, não como restrição à origem do rating. Rating AA global é superior a brAA nacional, atendendo o requisito "superior ou igual".</p>
+
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                    <p style="text-align: center;">
+                        <a href="https://github.com/rvgomessp-sudo/Analise-Financeira-Cr-dito-de-Garantia/raw/claude/coded-file-search-system-qpzgy/docs/PAPER_RATING_LICITACOES_ABNT.pdf"
+                           style="background: var(--primary); color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                            📥 Download PDF Completo (ABNT)
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Sistema Codificado de Argumentos | Janeiro 2026</p>
+        <p>25 argumentos • 6 categorias • 23 tags</p>
+    </footer>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function filterArguments(query) {
+            const cards = document.querySelectorAll('.argument-card');
+            query = query.toLowerCase();
+
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(query) ? 'block' : 'none';
+            });
+        }
+
+        function filterByCategory(category) {
+            const cards = document.querySelectorAll('.argument-card');
+
+            cards.forEach(card => {
+                if (!category || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function filterByStrength(strength) {
+            const cards = document.querySelectorAll('.argument-card');
+
+            cards.forEach(card => {
+                if (!strength || card.dataset.strength === strength) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
