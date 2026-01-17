@@ -31,16 +31,20 @@ import os
 from datetime import datetime, timedelta
 
 # Adiciona o diretório src ao path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SRC_DIR = os.path.join(SCRIPT_DIR, 'src')
+if SRC_DIR not in sys.path:
+    sys.path.insert(0, SRC_DIR)
 
 try:
     from captura_editais import (
         GestorCapturas,
         ConfiguracaoCaptura,
         DetectorRating,
-        FonteEdital
+        FonteEdital,
+        verificar_dependencias,
+        instalar_dependencias
     )
-    from captura_editais.capturador_base import verificar_dependencias, instalar_dependencias
     MODULO_DISPONIVEL = True
 except ImportError as e:
     MODULO_DISPONIVEL = False

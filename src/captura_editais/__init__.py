@@ -11,9 +11,20 @@ Funcionalidades:
 - Geração de alertas e relatórios
 """
 
-from .modelos import Edital, ExigenciaRating, FonteEdital, ResultadoBusca
+from .modelos import (
+    Edital,
+    ExigenciaRating,
+    FonteEdital,
+    ResultadoBusca,
+    ConfiguracaoCaptura,
+    TipoLicitacao,
+    TipoGarantia,
+    NivelRating,
+    AgenciaRating,
+    StatusEdital
+)
 from .detector_rating import DetectorRating
-from .capturador_base import CapturadorBase
+from .capturador_base import CapturadorBase, verificar_dependencias, instalar_dependencias
 from .capturador_pncp import CapturadorPNCP
 from .capturador_amazonas import CapturadorAmazonas
 from .gestor_capturas import GestorCapturas
@@ -23,9 +34,17 @@ __all__ = [
     'ExigenciaRating',
     'FonteEdital',
     'ResultadoBusca',
+    'ConfiguracaoCaptura',
+    'TipoLicitacao',
+    'TipoGarantia',
+    'NivelRating',
+    'AgenciaRating',
+    'StatusEdital',
     'DetectorRating',
     'CapturadorBase',
     'CapturadorPNCP',
     'CapturadorAmazonas',
-    'GestorCapturas'
+    'GestorCapturas',
+    'verificar_dependencias',
+    'instalar_dependencias'
 ]
