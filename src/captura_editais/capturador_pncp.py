@@ -153,8 +153,6 @@ class CapturadorPNCP(CapturadorBase):
         pagina = 1
         tam_pagina = 50
 
-        codigo_uf = self.UF_IBGE.get(uf.upper())
-
         while True:
             params = {
                 'dataInicial': data_inicio.strftime('%Y%m%d'),
@@ -163,8 +161,9 @@ class CapturadorPNCP(CapturadorBase):
                 'tamanhoPagina': tam_pagina
             }
 
-            if codigo_uf:
-                params['codigoUf'] = codigo_uf
+            # API usa 'uf' como string (ex: 'AM'), não código numérico
+            if uf:
+                params['uf'] = uf.upper()
 
             self.logger.info(f"Buscando página {pagina} - UF: {uf}")
 
