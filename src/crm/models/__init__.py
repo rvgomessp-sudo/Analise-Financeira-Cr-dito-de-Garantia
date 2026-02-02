@@ -10,6 +10,7 @@ from src.crm.models.conta import (
     Conta, PorteEmpresa, SituacaoCadastral, TipoEstabelecimento,
     QuadroSocietario, IndicadoresFinanceiros, LimiteSeguradora,
     Sinistro, CertidaoDocumento, SinalMercado,
+    DadosPGFN, TemperaturaLead,
 )
 from src.crm.models.contato import (
     Contato, AreaContato, NivelInfluencia, ConsentimentoLGPD,
@@ -29,6 +30,7 @@ __all__ = [
     'Conta', 'PorteEmpresa', 'SituacaoCadastral', 'TipoEstabelecimento',
     'QuadroSocietario', 'IndicadoresFinanceiros', 'LimiteSeguradora',
     'Sinistro', 'CertidaoDocumento', 'SinalMercado',
+    'DadosPGFN', 'TemperaturaLead',
     'Contato', 'AreaContato', 'NivelInfluencia', 'ConsentimentoLGPD',
     'Oportunidade', 'TipoGarantiaOportunidade', 'StatusSeguradora',
     'MatrizRisco', 'Contragarantia', 'EconomiaOperacao', 'EstudoTecnico',

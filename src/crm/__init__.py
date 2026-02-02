@@ -15,12 +15,14 @@ Módulos:
     seguranca    - Controle de acesso (RBAC) e LGPD
     automacao    - Regras de automação e jobs agendados
     integracoes  - Orquestrador de integrações externas
+    importador   - Importação de bases PGFN Marco Zero
 """
 
 from src.crm.models.conta import (
     Conta, PorteEmpresa, SituacaoCadastral, TipoEstabelecimento,
     QuadroSocietario, IndicadoresFinanceiros, LimiteSeguradora,
     Sinistro, CertidaoDocumento, SinalMercado,
+    DadosPGFN, TemperaturaLead,
 )
 from src.crm.models.contato import (
     Contato, AreaContato, NivelInfluencia, ConsentimentoLGPD,
@@ -55,12 +57,15 @@ from src.crm.seguranca.lgpd import GestorLGPD
 from src.crm.automacao.regras import MotorRegras, Regra, TipoEvento
 from src.crm.automacao.jobs import AgendadorJobs
 from src.crm.integracoes.orquestrador import OrquestradorIntegracoes
+from src.crm.importador.importador_bases import ImportadorBasesPGFN
+from src.crm.importador.estatisticas import EstatisticasImportacao
 
 __all__ = [
     # Models
     'Conta', 'PorteEmpresa', 'SituacaoCadastral', 'TipoEstabelecimento',
     'QuadroSocietario', 'IndicadoresFinanceiros', 'LimiteSeguradora',
     'Sinistro', 'CertidaoDocumento', 'SinalMercado',
+    'DadosPGFN', 'TemperaturaLead',
     'Contato', 'AreaContato', 'NivelInfluencia', 'ConsentimentoLGPD',
     'Oportunidade', 'TipoGarantiaOportunidade', 'StatusSeguradora',
     'MatrizRisco', 'Contragarantia', 'EconomiaOperacao', 'EstudoTecnico',
@@ -82,4 +87,6 @@ __all__ = [
     'MotorRegras', 'Regra', 'TipoEvento', 'AgendadorJobs',
     # Integrações
     'OrquestradorIntegracoes',
+    # Importador
+    'ImportadorBasesPGFN', 'EstatisticasImportacao',
 ]

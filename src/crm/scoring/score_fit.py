@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 from typing import Optional, List, Dict
 from decimal import Decimal
 
-from src.crm.models.conta import Conta, PorteEmpresa
+from src.crm.models.conta import Conta, PorteEmpresa, TemperaturaLead
 
 
 @dataclass
@@ -221,39 +221,81 @@ class ScoreFit:
         )
 
     def _avaliar_historico(self, conta: Conta) -> DetalheFit:
-        """Avalia histórico com seguros/garantias"""
+        """Avalia histórico com seguros/garantias (inclui dados PGFN)"""
         pontuacao = 0
         justificativas = []
 
-        # Limites com seguradoras
-        limites = conta.limites_vigentes
-        if len(limites) >= 3:
-            pontuacao += 40
-            justificativas.append(f"{len(limites)} limites vigentes com seguradoras")
-        elif len(limites) >= 1:
-            pontuacao += 25
-            justificativas.append(f"{len(limites)} limite(s) vigente(s)")
+        # === DADOS PGFN (quando disponíveis) ===
+        if conta.dados_pgfn:
+            pgfn = conta.dados_pgfn
+
+            # Já usa Seguro Garantia (HOT)
+            if pgfn.usa_seguro_garantia:
+                pontuacao += 45
+                justificativas.append(
+                    f"PGFN: {pgfn.qtd_seguro_garantia} SG judicial(is) ativa(s)"
+                )
+            # Usa garantias ineficientes (WARM)
+            elif pgfn.usa_garantia_ineficiente:
+                pontuacao += 25
+                justificativas.append(
+                    f"PGFN: {pgfn.qtd_carta_fianca} carta(s) fiança + "
+                    f"{pgfn.qtd_deposito} depósito(s) → conversível"
+                )
+            # Nenhuma garantia (COLD)
+            else:
+                pontuacao += 5
+                justificativas.append("PGFN: sem garantias constituídas")
+
+            # Volume de inscrições indica recorrência
+            if pgfn.qtd_inscricoes >= 10:
+                pontuacao = min(100, pontuacao + 15)
+                justificativas.append(
+                    f"Alta recorrência: {pgfn.qtd_inscricoes} inscrições"
+                )
+            elif pgfn.qtd_inscricoes >= 3:
+                pontuacao = min(100, pontuacao + 8)
+                justificativas.append(
+                    f"Recorrência moderada: {pgfn.qtd_inscricoes} inscrições"
+                )
+
+            # Longevidade (anos ativos)
+            if pgfn.anos_ativo and pgfn.anos_ativo >= 3:
+                pontuacao = min(100, pontuacao + 10)
+                justificativas.append(
+                    f"Ativo há {pgfn.anos_ativo} anos ({pgfn.ano_min}-{pgfn.ano_max})"
+                )
+
         else:
-            justificativas.append("Sem limites vigentes com seguradoras")
+            # === DADOS CRM (sem PGFN) — lógica original ===
+            limites = conta.limites_vigentes
+            if len(limites) >= 3:
+                pontuacao += 40
+                justificativas.append(
+                    f"{len(limites)} limites vigentes com seguradoras"
+                )
+            elif len(limites) >= 1:
+                pontuacao += 25
+                justificativas.append(f"{len(limites)} limite(s) vigente(s)")
+            else:
+                justificativas.append("Sem limites vigentes com seguradoras")
 
-        # Historico limites expirados indica experiência
-        if len(conta.limites_seguradoras) > len(limites):
-            pontuacao += 15
-            justificativas.append("Possui histórico de limites anteriores")
+            if len(conta.limites_seguradoras) > len(limites):
+                pontuacao += 15
+                justificativas.append("Possui histórico de limites anteriores")
 
-        # Sinistros abertos reduzem score
-        sinistros = conta.sinistros_abertos
-        if sinistros:
-            pontuacao = max(0, pontuacao - 20)
-            justificativas.append(f"{len(sinistros)} sinistro(s) aberto(s)")
-        elif conta.sinistros:
-            pontuacao += 10
-            justificativas.append("Histórico de sinistros resolvidos")
-        else:
-            pontuacao += 20
-            justificativas.append("Sem sinistros")
+            sinistros = conta.sinistros_abertos
+            if sinistros:
+                pontuacao = max(0, pontuacao - 20)
+                justificativas.append(f"{len(sinistros)} sinistro(s) aberto(s)")
+            elif conta.sinistros:
+                pontuacao += 10
+                justificativas.append("Histórico de sinistros resolvidos")
+            else:
+                pontuacao += 20
+                justificativas.append("Sem sinistros")
 
-        # Grupo econômico é positivo
+        # Grupo econômico é positivo (sempre)
         if conta.grupo_economico:
             pontuacao = min(100, pontuacao + 15)
             justificativas.append(f"Pertence ao grupo: {conta.grupo_economico}")
@@ -299,26 +341,60 @@ class ScoreFit:
         )
 
     def _avaliar_sinais(self, conta: Conta) -> DetalheFit:
-        """Avalia sinais de mercado ativos"""
+        """Avalia sinais de mercado ativos (inclui potencial PGFN como sinal)"""
         sinais = conta.sinais_nao_processados
         total_sinais = len(sinais)
+        pontuacao = 0
+        justificativas = []
 
         if total_sinais >= 3:
-            pontuacao = 100
-            justificativa = f"{total_sinais} sinais de mercado ativos (alto potencial)"
+            pontuacao = 80
+            justificativas.append(
+                f"{total_sinais} sinais de mercado ativos"
+            )
         elif total_sinais >= 1:
-            pontuacao = 60
-            justificativa = f"{total_sinais} sinal(is) de mercado ativo(s)"
+            pontuacao = 50
+            justificativas.append(
+                f"{total_sinais} sinal(is) de mercado ativo(s)"
+            )
         else:
-            pontuacao = 10
-            justificativa = "Sem sinais de mercado ativos"
+            pontuacao = 5
+            justificativas.append("Sem sinais de mercado ativos")
 
         # Sinais de editais valem mais
         sinais_editais = [s for s in sinais if s.tipo == "edital"]
         if sinais_editais:
-            pontuacao = min(100, pontuacao + 20)
-            justificativa += f" ({len(sinais_editais)} edital(is))"
+            pontuacao = min(100, pontuacao + 15)
+            justificativas.append(f"{len(sinais_editais)} edital(is)")
 
+        # === SINAL PGFN: potencial de Seguro Garantia ===
+        if conta.dados_pgfn and conta.dados_pgfn.potencial_sg > 0:
+            pot = conta.dados_pgfn.potencial_sg
+            if pot >= 50_000_000:
+                pontuacao = min(100, pontuacao + 30)
+                justificativas.append(
+                    f"PGFN: potencial SG R$ {pot/1e6:,.1f}M (muito alto)"
+                )
+            elif pot >= 10_000_000:
+                pontuacao = min(100, pontuacao + 20)
+                justificativas.append(
+                    f"PGFN: potencial SG R$ {pot/1e6:,.1f}M (alto)"
+                )
+            elif pot >= 1_000_000:
+                pontuacao = min(100, pontuacao + 10)
+                justificativas.append(
+                    f"PGFN: potencial SG R$ {pot/1e6:,.1f}M"
+                )
+
+        # Temperatura como sinal de prontidão
+        if conta.temperatura == TemperaturaLead.HOT:
+            pontuacao = min(100, pontuacao + 15)
+            justificativas.append("Lead HOT (já usa SG)")
+        elif conta.temperatura == TemperaturaLead.WARM:
+            pontuacao = min(100, pontuacao + 8)
+            justificativas.append("Lead WARM (garantia conversível)")
+
+        justificativa = "; ".join(justificativas)
         ponderada = pontuacao * self.PESO_SINAIS / 100
         return DetalheFit(
             fator="Sinais de Mercado",
