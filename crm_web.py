@@ -63,12 +63,16 @@ def contas_para_dataframe(contas, scores):
         pgfn = c.dados_pgfn
         score_info = scores.get(c.id, {'score': 0, 'semaforo': 'vermelho'})
 
+        # UF e Região - usar getattr para compatibilidade
+        uf = getattr(pgfn, 'uf', '') if pgfn else ''
+        regiao = getattr(pgfn, 'regiao', '') or getattr(c, 'regiao', '')
+
         dados.append({
             'ID': c.id,
             'CNPJ': c.cnpj_formatado,
             'Razão Social': c.razao_social,
-            'UF': pgfn.uf if pgfn else '',
-            'Região': pgfn.regiao if pgfn else '',
+            'UF': uf,
+            'Região': regiao,
             'Temperatura': c.temperatura.value if c.temperatura else '',
             'Porte': c.porte.value if c.porte else '',
             'Score': score_info['score'],
