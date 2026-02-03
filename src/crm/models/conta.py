@@ -29,6 +29,13 @@ class PorteEmpresa(Enum):
     GRANDE = "Grande (acima de R$ 300 milhões/ano)"
 
 
+class TemperaturaLead(Enum):
+    """Temperatura do lead conforme base PGFN Marco Zero"""
+    HOT = "HOT — Já usa Seguro Garantia + valor descoberto"
+    WARM = "WARM — Usa garantias ineficientes (carta fiança, depósito)"
+    COLD = "COLD — Sem nenhuma garantia constituída"
+
+
 class SituacaoCadastral(Enum):
     """Situação cadastral na Receita Federal"""
     ATIVA = "Ativa"
@@ -178,6 +185,93 @@ class Endereco:
 
 
 @dataclass
+class DadosPGFN:
+    """
+    Dados da base PGFN (Procuradoria-Geral da Fazenda Nacional).
+
+    Representa informações de dívidas ativas e garantias judiciais
+    extraídas das bases Marco Zero (hot/warm/cold).
+
+    Campos mapeados diretamente das colunas CSV:
+        qtd_inscricoes, divida_total, ticket_medio, etc.
+    """
+    qtd_inscricoes: int = 0
+    divida_total: float = 0.0
+    ticket_medio: float = 0.0
+    ano_min: Optional[int] = None
+    ano_max: Optional[int] = None
+
+    # Garantias existentes
+    qtd_seguro_garantia: int = 0
+    qtd_carta_fianca: int = 0
+    qtd_deposito: int = 0
+    qtd_penhora: int = 0
+    qtd_sem_garantia: int = 0
+
+    # Valores de oportunidade
+    valor_descoberto: float = 0.0
+    valor_garantia_ineficiente: float = 0.0
+    potencial_sg: float = 0.0
+
+    @property
+    def total_garantias(self) -> int:
+        """Total de inscrições com alguma garantia"""
+        return (self.qtd_seguro_garantia + self.qtd_carta_fianca +
+                self.qtd_deposito + self.qtd_penhora)
+
+    @property
+    def percentual_coberto(self) -> float:
+        """Percentual de inscrições cobertas por alguma garantia"""
+        if self.qtd_inscricoes == 0:
+            return 0.0
+        return self.total_garantias / self.qtd_inscricoes * 100
+
+    @property
+    def percentual_sg(self) -> float:
+        """Percentual coberto especificamente por Seguro Garantia"""
+        if self.qtd_inscricoes == 0:
+            return 0.0
+        return self.qtd_seguro_garantia / self.qtd_inscricoes * 100
+
+    @property
+    def usa_seguro_garantia(self) -> bool:
+        return self.qtd_seguro_garantia > 0
+
+    @property
+    def usa_garantia_ineficiente(self) -> bool:
+        return (self.qtd_carta_fianca + self.qtd_deposito) > 0
+
+    @property
+    def anos_ativo(self) -> Optional[int]:
+        """Número de anos com inscrições ativas"""
+        if self.ano_min and self.ano_max:
+            return self.ano_max - self.ano_min + 1
+        return None
+
+    def to_dict(self) -> Dict:
+        return {
+            'qtd_inscricoes': self.qtd_inscricoes,
+            'divida_total': self.divida_total,
+            'ticket_medio': self.ticket_medio,
+            'ano_min': self.ano_min,
+            'ano_max': self.ano_max,
+            'qtd_seguro_garantia': self.qtd_seguro_garantia,
+            'qtd_carta_fianca': self.qtd_carta_fianca,
+            'qtd_deposito': self.qtd_deposito,
+            'qtd_penhora': self.qtd_penhora,
+            'qtd_sem_garantia': self.qtd_sem_garantia,
+            'valor_descoberto': self.valor_descoberto,
+            'valor_garantia_ineficiente': self.valor_garantia_ineficiente,
+            'potencial_sg': self.potencial_sg,
+            'total_garantias': self.total_garantias,
+            'percentual_coberto': round(self.percentual_coberto, 1),
+            'percentual_sg': round(self.percentual_sg, 1),
+            'usa_seguro_garantia': self.usa_seguro_garantia,
+            'anos_ativo': self.anos_ativo,
+        }
+
+
+@dataclass
 class Conta:
     """
     Conta (Empresa/PJ) - Objeto central do CRM.
@@ -190,6 +284,7 @@ class Conta:
         Estrutura & Risco: indicadores, rating, limites, sinistros
         Operacional: endereços, certidões, KYC
         Sinais de mercado: editais, notícias, mudanças
+        PGFN: dados da base PGFN Marco Zero
     """
 
     # === IDENTIDADE ===
@@ -230,6 +325,11 @@ class Conta:
     data_ultima_verificacao: Optional[datetime] = None
     fonte_enriquecimento: str = ""  # API que enriqueceu
     dados_verificados: bool = False
+
+    # === DADOS PGFN (Base Marco Zero) ===
+    temperatura: Optional[TemperaturaLead] = None
+    regiao: str = ""  # Região TRF (ex: "3ª Região (SP/MS)")
+    dados_pgfn: Optional[DadosPGFN] = None
 
     # === CAMPOS CRM ===
     proprietario: str = ""  # Usuário responsável
@@ -384,7 +484,7 @@ class Conta:
 
     def to_dict(self) -> Dict:
         """Serializa conta para dicionário"""
-        return {
+        d = {
             'id': self.id,
             'cnpj': self.cnpj,
             'cnpj_formatado': self.cnpj_formatado,
@@ -406,6 +506,13 @@ class Conta:
             'data_criacao': self.data_criacao.isoformat(),
             'data_atualizacao': self.data_atualizacao.isoformat(),
         }
+        if self.temperatura:
+            d['temperatura'] = self.temperatura.name
+        if self.regiao:
+            d['regiao'] = self.regiao
+        if self.dados_pgfn:
+            d['dados_pgfn'] = self.dados_pgfn.to_dict()
+        return d
 
     def __repr__(self) -> str:
         return (f"Conta(cnpj={self.cnpj_formatado}, "

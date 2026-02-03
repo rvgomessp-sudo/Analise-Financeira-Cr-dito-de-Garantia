@@ -71,6 +71,10 @@ from src.crm.automacao.jobs import AgendadorJobs
 
 from src.crm.integracoes.orquestrador import OrquestradorIntegracoes
 
+from src.crm.importador.importador_bases import ImportadorBasesPGFN
+from src.crm.importador.estatisticas import EstatisticasImportacao
+from src.crm.models.conta import TemperaturaLead
+
 
 def separador(titulo: str) -> None:
     """Imprime separador visual"""
@@ -683,6 +687,124 @@ def demo_roadmap():
         print()
 
 
+def demo_importacao_bases_pgfn():
+    """
+    Demonstra importação das bases PGFN Marco Zero (hot/warm/cold).
+    Carrega dados reais, gera contas e oportunidades, aplica scoring.
+    """
+    separador("12. IMPORTAÇÃO DAS BASES PGFN MARCO ZERO")
+
+    diretorio = os.path.dirname(os.path.abspath(__file__))
+    importador = ImportadorBasesPGFN(diretorio=diretorio)
+
+    print("  Importando bases reais (hot + warm + cold limitada a 500)...\n")
+    contas, oportunidades, stats = importador.importar_todas(
+        limite_cold=500,  # Limitar cold p/ demo não ficar pesado
+    )
+
+    # --- Resumo da Importação ---
+    print(stats.gerar_resumo())
+
+    # --- Scoring com dados reais ---
+    subsecao("Scoring (Fit) nas contas reais — amostra HOT + WARM")
+    score_fit = ScoreFit()
+
+    # Top HOT por potencial
+    contas_hot = [c for c in contas if c.temperatura == TemperaturaLead.HOT]
+    contas_hot.sort(
+        key=lambda c: c.dados_pgfn.potencial_sg if c.dados_pgfn else 0,
+        reverse=True,
+    )
+
+    print(f"\n  TOP 10 HOT (por potencial SG):")
+    print(f"  {'CNPJ':<20} {'Score':>6} {'Sem':>5} {'Potencial':>16} {'Razão Social'}")
+    print(f"  {'-'*20} {'-'*6} {'-'*5} {'-'*16} {'-'*40}")
+    for conta in contas_hot[:10]:
+        resultado = score_fit.calcular(conta)
+        pot = conta.dados_pgfn.potencial_sg if conta.dados_pgfn else 0
+        pot_fmt = f"R$ {pot/1e6:,.1f}M" if pot >= 1e6 else f"R$ {pot:,.0f}"
+        print(
+            f"  {conta.cnpj_formatado:<20} "
+            f"{resultado.score_total:>5.1f} "
+            f"{resultado.semaforo[:3].upper():>5} "
+            f"{pot_fmt:>16} "
+            f"{conta.razao_social[:40]}"
+        )
+
+    # Top WARM por potencial
+    contas_warm = [c for c in contas if c.temperatura == TemperaturaLead.WARM]
+    contas_warm.sort(
+        key=lambda c: c.dados_pgfn.potencial_sg if c.dados_pgfn else 0,
+        reverse=True,
+    )
+
+    print(f"\n  TOP 10 WARM (por potencial SG):")
+    print(f"  {'CNPJ':<20} {'Score':>6} {'Sem':>5} {'Potencial':>16} {'Razão Social'}")
+    print(f"  {'-'*20} {'-'*6} {'-'*5} {'-'*16} {'-'*40}")
+    for conta in contas_warm[:10]:
+        resultado = score_fit.calcular(conta)
+        pot = conta.dados_pgfn.potencial_sg if conta.dados_pgfn else 0
+        pot_fmt = f"R$ {pot/1e6:,.1f}M" if pot >= 1e6 else f"R$ {pot:,.0f}"
+        print(
+            f"  {conta.cnpj_formatado:<20} "
+            f"{resultado.score_total:>5.1f} "
+            f"{resultado.semaforo[:3].upper():>5} "
+            f"{pot_fmt:>16} "
+            f"{conta.razao_social[:40]}"
+        )
+
+    # Distribuição de scores
+    subsecao("Distribuição de Scores (todas as contas importadas)")
+    scores_calculados = []
+    for conta in contas:
+        r = score_fit.calcular(conta)
+        scores_calculados.append(r)
+
+    verde = sum(1 for r in scores_calculados if r.semaforo == "verde")
+    amarelo = sum(1 for r in scores_calculados if r.semaforo == "amarelo")
+    vermelho = sum(1 for r in scores_calculados if r.semaforo == "vermelho")
+    total = len(scores_calculados)
+
+    print(f"  Total contas avaliadas: {total:,}")
+    print(f"    VERDE    (score >= 70): {verde:>8,}  ({verde/total*100:>5.1f}%)")
+    print(f"    AMARELO  (40-69):       {amarelo:>8,}  ({amarelo/total*100:>5.1f}%)")
+    print(f"    VERMELHO (< 40):        {vermelho:>8,}  ({vermelho/total*100:>5.1f}%)")
+
+    # --- Oportunidades geradas ---
+    subsecao("Oportunidades geradas automaticamente")
+    ops_cross = [o for o in oportunidades if "Cross-sell" in o.nome]
+    ops_conv = [o for o in oportunidades if "Conversão" in o.nome]
+    ops_novo = [o for o in oportunidades if "Prospecção" in o.nome]
+    ops_desc = [o for o in oportunidades if "descoberto" in o.nome.lower()]
+
+    print(f"  Total: {len(oportunidades):,}")
+    print(f"    Cross-sell (HOT):          {len(ops_cross):>6,}")
+    print(f"    Conversão (WARM):          {len(ops_conv):>6,}")
+    print(f"    Novo descoberto (WARM):    {len(ops_desc):>6,}")
+    print(f"    Prospecção (COLD):         {len(ops_novo):>6,}")
+
+    # Pipeline total em R$
+    valor_total_pipeline = sum(
+        float(o.valor_garantia) for o in oportunidades if o.valor_garantia
+    )
+    print(f"\n  Valor total do pipeline gerado: R$ {valor_total_pipeline/1e9:,.2f} bi")
+
+    # Top 10 oportunidades por valor
+    oportunidades_sorted = sorted(
+        oportunidades, key=lambda o: float(o.valor_garantia or 0), reverse=True
+    )
+    print(f"\n  TOP 10 OPORTUNIDADES (por valor de garantia):")
+    print(f"  {'ID':<18} {'Valor Garantia':>16} {'Tipo':<12} {'Nome'}")
+    print(f"  {'-'*18} {'-'*16} {'-'*12} {'-'*40}")
+    for op in oportunidades_sorted[:10]:
+        val = float(op.valor_garantia) if op.valor_garantia else 0
+        val_fmt = f"R$ {val/1e6:,.1f}M" if val >= 1e6 else f"R$ {val:,.0f}"
+        tipo = op.nome.split("—")[0].strip()[:12] if "—" in op.nome else op.nome[:12]
+        print(f"  {op.id:<18} {val_fmt:>16} {tipo:<12} {op.nome[:40]}")
+
+    return contas, oportunidades, stats
+
+
 def main():
     """Execução principal - demonstração completa do CRM"""
     print("""
@@ -711,7 +833,7 @@ def main():
     # Criar dados de demonstração
     contas, contatos, oportunidades = criar_dados_demonstracao()
 
-    # Executar demonstrações
+    # Executar demonstrações (módulos CRM)
     demo_modelo_dados(contas, contatos, oportunidades)
     demo_pipeline()
     demo_validacao_pipeline(oportunidades, contas, contatos)
@@ -723,6 +845,9 @@ def main():
     demo_automacao()
     demo_integracoes()
     demo_roadmap()
+
+    # Importação das bases PGFN reais
+    contas_pgfn, ops_pgfn, stats_pgfn = demo_importacao_bases_pgfn()
 
     separador("SISTEMA CRM COMPLETO")
     print("  Todos os módulos implementados e demonstrados:")
@@ -736,6 +861,9 @@ def main():
     print("    8. Automação (Regras + Jobs)")
     print("    9. Integrações (8 conectores configurados)")
     print("   10. Roadmap 90 dias")
+    print("   12. BASES PGFN Marco Zero integradas ao CRM")
+    print(f"       → {stats_pgfn.total_contas:,} contas reais importadas")
+    print(f"       → {stats_pgfn.oportunidades_geradas:,} oportunidades geradas")
     print()
 
 
