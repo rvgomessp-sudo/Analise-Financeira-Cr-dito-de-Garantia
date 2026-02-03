@@ -63,17 +63,12 @@ def contas_para_dataframe(contas, scores):
         pgfn = c.dados_pgfn
         score_info = scores.get(c.id, {'score': 0, 'semaforo': 'vermelho'})
 
-        # UF está no primeiro endereço (fiscal)
-        uf = ''
-        if c.enderecos_obras:
-            uf = c.enderecos_obras[0].uf if c.enderecos_obras[0].uf else ''
-
         dados.append({
             'ID': c.id,
             'CNPJ': c.cnpj_formatado,
             'Razão Social': c.razao_social,
-            'UF': uf,
-            'Região': c.regiao or '',
+            'UF': pgfn.uf if pgfn else '',
+            'Região': pgfn.regiao if pgfn else '',
             'Temperatura': c.temperatura.value if c.temperatura else '',
             'Porte': c.porte.value if c.porte else '',
             'Score': score_info['score'],

@@ -195,6 +195,11 @@ class DadosPGFN:
     Campos mapeados diretamente das colunas CSV:
         qtd_inscricoes, divida_total, ticket_medio, etc.
     """
+    # Localização
+    uf: str = ""
+    regiao: str = ""
+
+    # Quantidades
     qtd_inscricoes: int = 0
     divida_total: float = 0.0
     ticket_medio: float = 0.0

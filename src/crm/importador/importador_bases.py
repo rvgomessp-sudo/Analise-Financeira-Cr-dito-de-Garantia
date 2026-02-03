@@ -268,6 +268,8 @@ class ImportadorBasesPGFN:
 
         # Dados PGFN
         dados_pgfn = DadosPGFN(
+            uf=uf,
+            regiao=regiao,
             qtd_inscricoes=_safe_int(row.get('QTD_INSCRICOES', '0')),
             divida_total=divida_total,
             ticket_medio=ticket_medio,
