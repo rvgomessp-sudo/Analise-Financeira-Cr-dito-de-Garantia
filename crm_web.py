@@ -63,12 +63,16 @@ def contas_para_dataframe(contas, scores):
         pgfn = c.dados_pgfn
         score_info = scores.get(c.id, {'score': 0, 'semaforo': 'vermelho'})
 
+        # UF e Região - usar getattr para compatibilidade
+        uf = getattr(pgfn, 'uf', '') if pgfn else ''
+        regiao = getattr(pgfn, 'regiao', '') or getattr(c, 'regiao', '')
+
         dados.append({
             'ID': c.id,
             'CNPJ': c.cnpj_formatado,
             'Razão Social': c.razao_social,
-            'UF': c.uf or (pgfn.uf if pgfn else ''),
-            'Região': c.regiao or (pgfn.regiao if pgfn else ''),
+            'UF': uf,
+            'Região': regiao,
             'Temperatura': c.temperatura.value if c.temperatura else '',
             'Porte': c.porte.value if c.porte else '',
             'Score': score_info['score'],
@@ -89,14 +93,21 @@ def oportunidades_para_dataframe(oportunidades):
     """Converte lista de oportunidades para DataFrame"""
     dados = []
     for o in oportunidades:
+        tipo_obj = getattr(o, 'tipo_garantia', None) or getattr(o, 'tipo', None)
+        tipo_str = tipo_obj.value if tipo_obj else ''
+        etapa_obj = getattr(o, 'etapa', None)
+        etapa_str = etapa_obj.nome if etapa_obj and hasattr(etapa_obj, 'nome') else str(etapa_obj) if etapa_obj else ''
+        data_obj = getattr(o, 'data_criacao', None)
+        data_str = data_obj.strftime('%d/%m/%Y') if data_obj else ''
+
         dados.append({
             'ID': o.id,
             'Nome': o.nome,
             'Conta ID': o.conta_id,
-            'Tipo': o.tipo.value if o.tipo else '',
-            'Etapa': o.etapa.nome if o.etapa else '',
+            'Tipo': tipo_str,
+            'Etapa': etapa_str,
             'Valor Garantia': float(o.valor_garantia) if o.valor_garantia else 0,
-            'Data Criação': o.data_criacao.strftime('%d/%m/%Y') if o.data_criacao else '',
+            'Data Criação': data_str,
         })
 
     return pd.DataFrame(dados)
