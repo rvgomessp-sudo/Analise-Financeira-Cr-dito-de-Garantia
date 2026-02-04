@@ -93,14 +93,21 @@ def oportunidades_para_dataframe(oportunidades):
     """Converte lista de oportunidades para DataFrame"""
     dados = []
     for o in oportunidades:
+        tipo_obj = getattr(o, 'tipo_garantia', None) or getattr(o, 'tipo', None)
+        tipo_str = tipo_obj.value if tipo_obj else ''
+        etapa_obj = getattr(o, 'etapa', None)
+        etapa_str = etapa_obj.nome if etapa_obj and hasattr(etapa_obj, 'nome') else str(etapa_obj) if etapa_obj else ''
+        data_obj = getattr(o, 'data_criacao', None)
+        data_str = data_obj.strftime('%d/%m/%Y') if data_obj else ''
+
         dados.append({
             'ID': o.id,
             'Nome': o.nome,
             'Conta ID': o.conta_id,
-            'Tipo': o.tipo.value if o.tipo else '',
-            'Etapa': o.etapa.nome if o.etapa else '',
+            'Tipo': tipo_str,
+            'Etapa': etapa_str,
             'Valor Garantia': float(o.valor_garantia) if o.valor_garantia else 0,
-            'Data Criação': o.data_criacao.strftime('%d/%m/%Y') if o.data_criacao else '',
+            'Data Criação': data_str,
         })
 
     return pd.DataFrame(dados)
