@@ -390,7 +390,7 @@ def corpo():
           Paragraph(
               "Conforme relatado, a garantia de proposta da Zurich (prêmio de R$ 136 mil, com limite de R$ 50 milhões "
               "aprovado para a garantia de execução) já estava emitida quando a Junto emitiu outra apólice para a "
-              "mesma obrigação, 48 horas antes do certame, por R$ 9 mil. Esse ponto independe da discussão de rating "
+              "mesma obrigação, 48 horas antes do certame, por R$ 39 mil. Esse ponto independe da discussão de rating "
               "e deve ser instruído com as duas apólices, datas de emissão e comprovantes de pagamento.", P)]
 
     # 9. Objeções previsíveis

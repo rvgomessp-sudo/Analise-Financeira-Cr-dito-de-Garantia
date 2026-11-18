@@ -307,7 +307,7 @@ ART_23 = (
 FATOS_RELATADOS = {
     "zurich": {"bid_bond_premio": 136_000.00, "limite_performance": 50_000_000.00,
                "premio_performance": 980_000.00, "situacao": "emitida e vigente"},
-    "junto": {"bid_bond_premio": 9_000.00, "limite_performance": None,
+    "junto": {"bid_bond_premio": 39_000.00, "limite_performance": None,
               "situacao": "emitida 48h antes do certame"},
 }
 
