@@ -1,96 +1,190 @@
 {
   "data_estudo": "2026-11-18",
   "certame": "CC17/2025 - CSC/SEAP Amazonas",
-  "tabela_sp_brasil_2023": [
+  "exigencia_edital": {
+    "S&P": "brAA-",
+    "Fitch": "A-(bra)",
+    "Moody's": "A1.br"
+  },
+  "margem_de_seguranca": [
     {
-      "global": "BB+ e acima",
-      "nacional": [
+      "agencia": "S&P (tabela 2023)",
+      "exigencia_edital": "brAA-",
+      "equivale_na_escala_global_a_partir_de": "B+",
+      "nota_zurich": "AA",
+      "nota_zurich_na_escala_nacional": [
         "brAAA"
-      ]
+      ],
+      "degraus_de_folga": 11,
+      "fonte": "S&P, 19/12/2023, Tabela 3"
     },
     {
-      "global": "BB",
-      "nacional": [
-        "brAAA",
-        "brAA+"
-      ]
+      "agencia": "S&P (tabela 2018)",
+      "exigencia_edital": "brAA-",
+      "equivale_na_escala_global_a_partir_de": "B+",
+      "nota_zurich": "AA",
+      "nota_zurich_na_escala_nacional": [
+        "brAAA"
+      ],
+      "degraus_de_folga": 11,
+      "fonte": "S&P, 25/06/2018, Tabela 3"
     },
     {
-      "global": "BB-",
-      "nacional": [
-        "brAA+",
-        "brAA"
-      ]
-    },
-    {
-      "global": "B+",
-      "nacional": [
-        "brAA",
-        "brAA-",
-        "brA+"
-      ]
-    },
-    {
-      "global": "B",
-      "nacional": [
-        "brA+",
-        "brA",
-        "brA-"
-      ]
-    },
-    {
-      "global": "B-",
-      "nacional": [
-        "brBBB+",
-        "brBBB",
-        "brBBB-",
-        "brBB+"
-      ]
-    },
-    {
-      "global": "CCC+",
-      "nacional": [
-        "brBB+",
-        "brBB",
-        "brBB-"
-      ]
-    },
-    {
-      "global": "CCC",
-      "nacional": [
-        "brB+",
-        "brB",
-        "brB-"
-      ]
-    },
-    {
-      "global": "CCC-",
-      "nacional": [
-        "brCCC+",
-        "brCCC",
-        "brCCC-"
-      ]
-    },
-    {
-      "global": "CC",
-      "nacional": [
-        "brCC"
-      ]
-    },
-    {
-      "global": "C",
-      "nacional": [
-        "brC"
-      ]
+      "agencia": "Moody's (mapa 2020)",
+      "exigencia_edital": "A1.br",
+      "equivale_na_escala_global_a_partir_de": "Ba3",
+      "nota_zurich": "Aa2",
+      "nota_zurich_na_escala_nacional": [
+        "Aaa.br"
+      ],
+      "degraus_de_folga": 10,
+      "fonte": "Moody's América Latina, Form. Referência 2020"
     }
   ],
-  "conversao_zurich": {
-    "rating_global": "AA",
-    "escala_nacional_indicativa": [
-      "brAAA"
+  "tabelas": {
+    "sp_2023": [
+      [
+        "BB+ e acima",
+        [
+          "brAAA"
+        ]
+      ],
+      [
+        "BB",
+        [
+          "brAAA",
+          "brAA+"
+        ]
+      ],
+      [
+        "BB-",
+        [
+          "brAA+",
+          "brAA"
+        ]
+      ],
+      [
+        "B+",
+        [
+          "brAA",
+          "brAA-",
+          "brA+"
+        ]
+      ],
+      [
+        "B",
+        [
+          "brA+",
+          "brA",
+          "brA-"
+        ]
+      ],
+      [
+        "B-",
+        [
+          "brBBB+",
+          "brBBB",
+          "brBBB-",
+          "brBB+"
+        ]
+      ],
+      [
+        "CCC+",
+        [
+          "brBB+",
+          "brBB",
+          "brBB-"
+        ]
+      ]
     ],
-    "atende_igual_ou_superior_a_brAAA": true,
-    "degraus_acima_do_limiar_brAAA": 8
+    "sp_2018": [
+      [
+        "BB e acima",
+        [
+          "brAAA"
+        ]
+      ],
+      [
+        "BB-",
+        [
+          "brAAA",
+          "brAA+"
+        ]
+      ],
+      [
+        "B+",
+        [
+          "brAA+",
+          "brAA",
+          "brAA-"
+        ]
+      ],
+      [
+        "B",
+        [
+          "brA+",
+          "brA",
+          "brA-"
+        ]
+      ],
+      [
+        "B-",
+        [
+          "brBBB+",
+          "brBBB",
+          "brBBB-"
+        ]
+      ]
+    ],
+    "moodys_2020": [
+      [
+        "Ba1 e acima",
+        [
+          "Aaa.br"
+        ]
+      ],
+      [
+        "Ba2",
+        [
+          "Aa1.br",
+          "Aa2.br",
+          "Aa3.br"
+        ]
+      ],
+      [
+        "Ba3",
+        [
+          "A1.br",
+          "A2.br",
+          "A3.br"
+        ]
+      ],
+      [
+        "B1",
+        [
+          "Baa1.br",
+          "Baa2.br",
+          "Baa3.br"
+        ]
+      ],
+      [
+        "B2",
+        [
+          "Ba1.br",
+          "Ba2.br"
+        ]
+      ]
+    ]
+  },
+  "ratings_zurich_oficiais": {
+    "S&P": "AA",
+    "Moody's": "Aa2",
+    "AM Best": "A+ (Superior)"
+  },
+  "ratings_zurich_carta_18_12_2025": {
+    "S&P": "AA-",
+    "Moody's": "Aa3",
+    "Fitch": "AA-"
   },
   "seguradoras": {
     "zurich_minas": {
@@ -106,26 +200,29 @@
       "ativos_garantidores": 2706645,
       "ratings": {
         "S&P (controladora Zurich Insurance Company Ltd)": "AA/estável",
-        "Moody's (controladora)": "Aa2/estável",
+        "Moody's (controladora; elevado de Aa3 em set/2024)": "Aa2/estável",
         "AM Best (controladora)": "A+ (Superior)/estável"
       },
-      "rating_global_sp_aplicavel": "AA",
       "fontes": [
         {
           "documento": "DFs intermediárias Zurich Minas Brasil Seguros S.A., 30/06/2024",
-          "localizacao": "Nota 1 (acionistas); Nota 20.c (PLA e CMR); quadro de cobertura das provisões técnicas"
+          "localizacao": "Nota 1 (acionistas); Nota 20.c (PLA e CMR); cobertura das provisões técnicas"
         },
         {
           "documento": "Condições gerais Seguro Garantia Zurich (Circular SUSEP 662/2022)",
-          "localizacao": "Qualificação da seguradora: 'devidamente autorizada pela SUSEP sob o código nº 05495'"
+          "localizacao": "'devidamente autorizada pela SUSEP sob o código nº 05495'"
         },
         {
-          "documento": "Zurich Insurance Group, Annual results 2024 - Consolidated financial statements",
-          "localizacao": "Nota 27, Tabela 27.1, p. 132 (subsidiária significativa, 100% de voto e capital)"
+          "documento": "Zurich Insurance Group, Annual results 2024",
+          "localizacao": "Nota 27, Tabela 27.1, p. 132"
         },
         {
-          "documento": "zurich.com/investor-relations/ratings (capturado em 03/01/2026)",
-          "localizacao": "Tabela de ratings de força financeira"
+          "documento": "zurich.com/investor-relations/ratings (03/01/2026)",
+          "localizacao": "Tabela de ratings"
+        },
+        {
+          "documento": "Carta da Zurich (Head of Surety LatAm), 18/12/2025",
+          "localizacao": "Itens 1 a 3"
         }
       ],
       "suficiencia_capital": 384076,
@@ -147,15 +244,14 @@
         "AM Best (DFs 2024)": "A- (Excelente)",
         "AM Best (12/11/2026, Junto Re e Junto Seg em conjunto)": "A (Excellent)"
       },
-      "rating_global_sp_aplicavel": null,
       "fontes": [
         {
           "documento": "DFs Junto Seguros S.A. 2024 (publicadas em 28/02/2025)",
-          "localizacao": "Relatório da Administração; Nota 21 (suficiência do PLA e capital)"
+          "localizacao": "Relatório da Administração; Nota 21"
         },
         {
-          "documento": "AM Best, 12/11/2026 (Business Wire)",
-          "localizacao": "Ratings de Junto Re e Junto Seg em conjunto; apoio da controladora Travelers"
+          "documento": "AM Best, 12/11/2026",
+          "localizacao": "Ratings conjuntos; apoio da controladora Travelers"
         }
       ],
       "suficiencia_capital": 218557,
@@ -166,55 +262,55 @@
   "refutacoes": [
     {
       "numero": 1,
-      "titulo": "O edital exige uma NOTA na escala nacional, não um rating EMITIDO no Brasil",
-      "argumento": "A cláusula pede rating 'igual ou superior a brAAA em escala nacional'. Ela fixa um patamar de qualidade, medido na régua nacional. Não exige que a classificação tenha sido emitida por escritório brasileiro nem que a seguradora tenha relatório nacional próprio.",
-      "prova": "Texto da cláusula do edital (conferir redação literal no edital CC17/2025)."
+      "titulo": "O edital fixa um patamar de qualidade, medido na régua nacional",
+      "argumento": "A cláusula exige rating igual ou superior, em escala nacional, a brAA- (S&P), A-(bra) (Fitch) ou A1.br (Moody's). Ela define a régua de medida, não o país de emissão da nota nem a existência de relatório nacional próprio da seguradora.",
+      "prova": "Solicitação de parecer técnico à Zurich, 17/12/2025 (transcreve o edital); conferir a redação literal do edital."
     },
     {
       "numero": 2,
-      "titulo": "A própria S&P converte o AA global em brAAA",
-      "argumento": "Pela Tabela 3 da metodologia S&P (dez/2023), toda qualidade de crédito global 'BB+ e acima' corresponde a brAAA. O AA está 8 degraus acima desse limiar. Convertido pela régua oficial, o AA dá brAAA: atende ao 'igual'. brAAA é o teto da escala: não existe nota nacional superior, então o 'superior' só pode ser demonstrado pela escala global.",
-      "prova": "S&P, National And Regional Scale Credit Ratings Methodology, 19/12/2023, Tabela 3, p. 3."
+      "titulo": "As tabelas oficiais das agências convertem a nota global em nacional",
+      "argumento": "S&P (2018 e 2023) e Moody's (2020) publicam tabelas que derivam a nota nacional da qualidade de crédito global. Em todas, o patamar do edital corresponde a uma nota global na faixa B/BB. A Zurich está em AA (S&P) e Aa2 (Moody's): 10 a 11 degraus acima, e convertida dá a nota máxima (brAAA / Aaa.br).",
+      "prova": "S&P 19/12/2023 Tab. 3; S&P 25/06/2018 Tab. 3; Moody's Form. Referência 2020."
     },
     {
       "numero": 3,
-      "titulo": "A Zurich Minas é autorizada pela SUSEP e mantém os ativos garantidores no Brasil",
-      "argumento": "A Zurich Minas Brasil Seguros S.A. é sociedade anônima brasileira, autorizada pela SUSEP (código 05495) e opera seguro-garantia sob a Circular SUSEP 662/2022. Em 30/06/2024 tinha R$ 2,71 bilhões em ativos oferecidos em garantia das provisões técnicas, majoritariamente títulos do Tesouro Nacional, com suficiência de R$ 150 milhões. Pela Resolução CMN 4.993/2022 (Regulamento, art. 4º), só valem como garantidores ativos registrados ou custodiados em instituições autorizadas pelo BCB ou pela CVM.",
-      "prova": "Condições gerais Zurich (código SUSEP 05495); DFs Zurich Minas 30/06/2024; Res. CMN 4.993/2022."
+      "titulo": "A Zurich Minas é brasileira, autorizada pela SUSEP, com ativos no país",
+      "argumento": "Sociedade anônima brasileira, código SUSEP 05495, opera seguro-garantia sob a Circular SUSEP 662/2022. Em 30/06/2024 tinha R$ 2,71 bilhões em ativos garantidores, quase todos títulos do Tesouro Nacional. Pela Res. CMN 4.993/2022 (Regulamento, art. 4º), só valem ativos custodiados em instituições autorizadas pelo BCB ou CVM.",
+      "prova": "Condições gerais Zurich; DFs Zurich Minas 30/06/2024; Res. CMN 4.993/2022."
     },
     {
       "numero": 4,
-      "titulo": "A subsidiária é controlada diretamente pela entidade que tem o AA",
-      "argumento": "O AA (S&P), Aa2 (Moody's) e A+ (AM Best) são da Zurich Insurance Company Ltd. Essa mesma empresa detém 99,9999% das ações da Zurich Minas. O relatório anual do grupo lista a Zurich Minas como subsidiária significativa, com 100% de voto e capital e capital social de R$ 2,3 bilhões. Não há intermediário entre a seguradora brasileira e a entidade classificada.",
-      "prova": "DFs Zurich Minas 30/06/2024, Nota 1; Zurich Annual results 2024, Nota 27, Tabela 27.1, p. 132."
+      "titulo": "A controladora direta é a própria entidade classificada",
+      "argumento": "Os ratings AA / Aa2 / A+ são da Zurich Insurance Company Ltd, que detém 99,9999% da Zurich Minas. O grupo a lista como subsidiária significativa, 100% de voto e capital. A própria Zurich declarou por escrito (18/12/2025) que a subsidiária está plenamente vinculada ao conglomerado, cuja solidez sustenta a operação brasileira.",
+      "prova": "DFs Zurich Minas, Nota 1; Annual results 2024, Nota 27, p. 132; carta Zurich 18/12/2025."
     },
     {
       "numero": 5,
-      "titulo": "A Junto também tem rating derivado do grupo: a tese da RH a desqualificaria",
-      "argumento": "A Junto descreve seus ratings como 'equivalentes a brAAA'. A AM Best classifica Junto Seguros e Junto Resseguros em conjunto e atribui a perspectiva ao 'apoio contínuo da controladora, The Travelers Companies'. A Junto cede 99,4% do resseguro à resseguradora do próprio grupo. E em 2016 a S&P rebaixou a então J. Malucelli Seguradora de brAA- para brA por ação sobre o controlador, o Paraná Banco. Se rating apoiado no grupo não valesse, o da Junto também não valeria.",
-      "prova": "DFs Junto 2024 (Relatório da Administração e nota de resseguro); AM Best 12/11/2026; S&P 2016 (Grupo Amanhã)."
+      "titulo": "A tese da RH desqualificaria a própria Junto",
+      "argumento": "A AM Best classifica Junto Seguros e Junto Resseguros em conjunto, com apoio da controladora Travelers; a Junto cede 99,4% do resseguro à resseguradora do grupo; e em 2016 a S&P rebaixou a então J. Malucelli por ação sobre o controlador Paraná Banco. Se rating apoiado no grupo não valesse, o da Junto também não valeria.",
+      "prova": "DFs Junto 2024; AM Best 12/11/2026; S&P 2016 (Grupo Amanhã)."
     }
   ],
   "pontos_de_atencao": [
     {
+      "titulo": "Carta da Zurich com notas desatualizadas",
+      "texto": "A carta de 18/12/2025 cita S&P AA-, Moody's Aa3 e Fitch AA-. A página oficial de RI mostra S&P AA e Moody's Aa2 (elevado em set/2024), e não lista Fitch. As notas da carta também superam o patamar com folga, mas convém pedir à Zurich uma versão com as notas vigentes, para que a RH não explore a divergência."
+    },
+    {
+      "titulo": "Nova estrutura da S&P no Brasil",
+      "texto": "Desde 18/08/2025 as notas 'br' são emitidas pela S&P National Ratings, com metodologias próprias; em 16/12/2025 a S&P global retirou o Brasil da sua tabela de prefixos. As metodologias novas não puderam ser baixadas para este estudo. A conclusão não depende delas: a folga de 11 degraus excede qualquer recalibração já registrada."
+    },
+    {
       "titulo": "Rating próprio da Zurich Minas",
-      "texto": "Nenhuma das fontes levantadas mostra rating S&P, Fitch ou Moody's emitido para a Zurich Minas Brasil isoladamente. O estudo se apoia no rating da controladora direta. Vale pedir à Zurich uma declaração formal de que a subsidiária é 'core' na metodologia das agências, ou carta-conforto da matriz."
-    },
-    {
-      "titulo": "Limitação pelo risco-país",
-      "texto": "Pela metodologia de grupos da S&P, a nota global de uma subsidiária pode ser limitada pelo risco do país onde opera (soberano Brasil: BB). Mesmo nesse cenário, a Tabela 3 converte BB+ e acima em brAAA. No limite exato de BB, a tabela indica 'brAAA ou brAA+'. As DFs da Zurich Minas, porém, informam a Zurich Resseguradora Brasil S.A. com S&P AA-, o que indica que o grupo não tem suas entidades brasileiras rebaixadas ao nível do soberano."
-    },
-    {
-      "titulo": "Versão da tabela S&P",
-      "texto": "A tabela usada é a de dezembro de 2023. Antes de protocolar, confirmar no site da S&P se há versão mais recente."
+      "texto": "Não foi localizado rating S&P, Fitch ou Moody's emitido para a Zurich Minas isoladamente. O estudo se apoia no rating da controladora direta e na declaração da Zurich."
     },
     {
       "titulo": "Índice de solvência",
-      "texto": "Em índice relativo (PLA / CMR), a Junto (386%) supera a Zurich Minas (157%). O índice mede folga em relação ao próprio risco, não capacidade absoluta. Para um contrato de R$ 1 bilhão, o que protege o Estado é o volume de capital e o respaldo do grupo, onde a Zurich é muito superior."
+      "texto": "Em índice relativo (PLA/CMR), a Junto (386%) supera a Zurich Minas (157%). O índice mede folga relativa ao próprio risco, não capacidade absoluta para um contrato de R$ 1 bilhão."
     },
     {
       "titulo": "Redação do edital",
-      "texto": "Os três requisitos foram transcritos a partir do relato do cliente. Citar a cláusula literal do edital CC17/2025 na peça final."
+      "texto": "O patamar (brAA- / A-(bra) / A1.br) foi extraído da solicitação de 17/12/2025. Em mensagem anterior foi citado brAAA. A conclusão vale para os dois, mas a peça deve citar a cláusula literal."
     }
   ],
   "art_23_circular_susep_662": "É vedada a utilização de mais de um Seguro Garantia para cobrir a mesma obrigação do objeto principal, salvo no caso de apólices complementares.",
